@@ -1,0 +1,234 @@
+.background{
+    background-image:url("./images/Japanese_Clasws_Form_Background.png");
+    background-repeat: repeat;
+    background-size:cover;
+      margin:5em 0 5em 0;
+      align-items:center;
+      justify-content:center;
+      display:flex;
+      justify-content:center;
+      height:100vh;
+    }
+    
+	.form{
+      margin:1em;
+      display:flex;
+      flex-direction: column;
+      display:flex;
+      justify-content: center;
+      background:white;
+      border:1px solid rgb(51, 48, 48);
+      padding:2em;
+      border-radius:1em;
+      -moz-box-shadow: 0 15px 10px  gray;
+      -webkit-box-shadow: 0 12px 10px gray;
+      -webkit-backdrop-filter:blur(5px);
+      backdrop-filter:blur(9px);
+      box-shadow: 0 12px 10px  gray;
+      width: 50% !important;
+      overflow:scroll;
+      background-color: rgba(255, 255, 255, 0.3);
+	}
+    
+  .message-box{
+      margin:1em;
+      display:none;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items:center;
+      background:white;
+      border:1px solid lightgrey;
+      padding:2em;
+      border-radius:1em;
+      -moz-box-shadow: 0 15px 10px  gray;
+      -webkit-box-shadow: 0 12px 10px gray;
+      -webkit-backdrop-filter:blur(5px);
+      backdrop-filter:blur(9px);
+      box-shadow: 0 12px 10px  gray;
+      width: 50%;
+      background-color: rgba(255, 255, 255, 0.3);
+      text-align:center;
+	}
+
+    .logo{
+        background-image: url("./images/japanese-class-logo.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        height:9.375em;
+    }
+
+    .field-group{
+    	display:flex;
+        flex-direction:column;
+        margin: 0 0 2em 0;
+    }
+    
+    .field-group label{
+    	margin-bottom:0.5em;
+        margin-top:0.5em;
+        letter-spacing:0.2em;
+        font-family:sans-serif;
+        font-weight: bold;
+        color:rgba(107,0,0,1);
+        font-size:2em;
+        display:flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: start;
+    }
+    
+    .text-input{
+    	padding:0.5em 0.5em 0.5em 0.5em;
+        background: rgb(255, 255, 255);
+        color:Black;
+        font-size:1rem;
+        letter-spacing: 0.2em; 
+        border-width:0.5em;
+        border-style: solid;
+        border-image: radial-gradient(rgb(255, 255, 255), rgb(168,0,0)) 1;
+    }
+
+    .text-input:focus{
+        border:none;
+        outline-width: 0 !important;
+        border-width:0.5em;
+        border-style: solid;
+        background: rgb(245, 245, 245);
+        border-image: radial-gradient(rgb(232, 147, 147), rgb(88, 7, 7)) 1;
+    }
+    
+    .button{
+    	border-radius:0px;
+        border:none;
+        padding:1em;
+        font-family:sans-serif;
+        font-size:1em;
+        letter-spacing:0.2em;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+        display:flex;
+        justify-content:center;
+        max-width:15em;
+        color:white;
+        cursor:pointer;
+    }
+
+    .not-valid{
+      border:0.5em solid red;
+      background-color:#F59592;
+    }
+
+    .validator{
+      display: block;
+      color:darkred;
+      font-size:0.8em;
+      letter-spacing: 0.2em;
+    }
+
+    .loadingMessage{
+      color:rgba(107,0,0,1);
+    }
+
+	 @keyframes button-click {
+      0%{background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);}
+        50%{background-image:radial-gradient(circle at top left, rgb(232, 147, 147) -90%, rgb(88, 7, 7) 100%);}
+	}
+
+    .button:active{
+        background-image:radial-gradient(circle at top right, rgb(232, 147, 147) -90%, rgb(88, 7, 7) 100%);
+	}
+
+    .info{
+        color:grey;
+        font-weight:200;
+        font-size:0.45em;
+        text-align:right;
+        margin-top: inherit;
+        width:100%;
+        letter-spacing:0.21em;
+    }
+
+    @media screen and (max-width: 48em){
+        .form{
+            width: 75% !important;
+        }
+        .logo{
+            background-position: center;
+            margin-bottom:0px;
+        }
+        .message-box{
+            margin:0 0.5em 0 0.5em !important;
+            width: 75% !important;
+        }
+        .field-group label{
+            flex-direction: column;
+            align-content: center;
+            justify-content: start;
+        }
+        .info{
+            color:grey;
+            font-weight:200;
+            font-size:0.4em;
+            text-align:left;
+            letter-spacing:0.5em;
+            margin-top: inherit;
+            width:100%;
+        }
+    }
+
+    @media screen and (max-width: 36em){
+        .form{
+            width: 100% !important;
+            padding:0 1em 0 1em;
+            margin:0 0.5em 0 0.5em;
+        }
+
+        .field-group label{
+            font-size:1.3em;
+        }
+
+        .text-input{
+            border-width:0.3em;
+        }
+
+        .text-input:focus{
+            border-width:0.3em;
+        }
+
+        .logo{
+            background-position: center;
+            margin-bottom:0px;
+        }
+
+        .field-group{
+            margin: 1em 0 1em 0;
+        }
+
+        .button-group{
+            display:flex !important;
+            justify-content:center;
+            align-items: center;
+        }
+        
+        .message-box{
+            margin:0 0.5em 0 0.5em !important;
+            width: 75% !important;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            letter-spacing:0.25em;
+        }
+
+        .button-group button{
+            width:100%;
+        }
+
+        .info{
+            color:grey;
+            font-weight:200;
+            font-size:0.4em;
+            text-align:left;
+            letter-spacing:0.5em;
+            margin-top: inherit;
+            width:100%;
+        }
+    }
