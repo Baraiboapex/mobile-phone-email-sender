@@ -53,16 +53,30 @@ async function displayData({data}){
 }
 
 const api = {
-    get:({
-        
-    })=>{
-
-    },
-    post:({
-
-    })=>{
-
-    }    
+    get:async ({
+        url,
+        body,
+        otherConfig,
+        headers
+    })=>setupFetch({
+        url,
+        body,
+        method:"GET",
+        otherConfig,
+        headers
+    }),
+    post:async ({
+        url,
+        body,
+        otherConfig,
+        headers
+    })=>setupFetch({
+        url,
+        body,
+        method:"POST",
+        otherConfig,
+        headers
+    })   
 };
 
 export default api;

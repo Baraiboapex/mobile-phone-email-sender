@@ -6,27 +6,27 @@ const MONTH_FORMAT_STRING = "MM";
 const DAY_FORMAT_STRING = "dd";
 const YEAR_FORMAT_STRING = "YYYY";
 
-function formatTime(timeToFormat){
-    return dayjs(timeToFormat).format(TIME_FORMAT_STRING);
+export function formatTime(timeToFormat){
+    return dayjs(timeToFormat).format(TIME_FORMAT_STRING).toString();
 }
 
-function formatMonth(monthToFormat){
-    return dayjs(monthToFormat).format(MONTH_FORMAT_STRING);
+export function formatMonth(monthToFormat){
+    return dayjs(monthToFormat).format(MONTH_FORMAT_STRING).toString();
 }
 
-function formatDay(dayToFormat){
-    return dayjs(dayToFormat).format(DAY_FORMAT_STRING);
+export function formatDay(dayToFormat){
+    return dayjs(dayToFormat).format(DAY_FORMAT_STRING).toString();
 }
 
-function formatYear(yearToFormat){
-    return dayjs(yearToFormat).format(DAY_FORMAT_STRING);
+export function formatYear(yearToFormat){
+    return dayjs(yearToFormat).format(DAY_FORMAT_STRING).toString();
 }
 
-function formatNormalDate(dateToFormat){
+export function formatNormalDate(dateToFormat){
     return dayjs(dateToFormat).format(YEAR_FORMAT_STRING).toString();
 }
 
-function formatDateTimeAsPhrase({
+export function formatDateTimeAsPhrase({
     dateToFormat, 
     timeToFormat, 
     joiningWord
@@ -37,12 +37,3 @@ function formatDateTimeAsPhrase({
 
     return completedPhraseString;
 }
-
-export default {
-    formatNormalDate,
-    formatDateTimeAsPhrase,
-    formatTime,
-    formatMonth,
-    formatDay,
-    formatYear
-};

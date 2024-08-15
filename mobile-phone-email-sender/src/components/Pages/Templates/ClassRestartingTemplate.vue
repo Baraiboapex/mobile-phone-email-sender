@@ -4,9 +4,17 @@
       formatDateTimeAsPhrase,
       formatTime,
       formatMonth,
-      formatDay
-    } from "../../../helpers/formatHelpers/dateForm";
-    
+      formatDay,
+      formatYear
+    } from "../../../helpers/formatHelpers/dateFormatHelper.js";
+    import {
+        validateTextInput,
+        validateAllTextFields,
+        renderTextFieldValidation,
+        textRulesNames,
+        DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
+    } from "../../../Infra/inputValidator.js";
+
    const emittedEvents = defineEmits([
         "setTemplateParams",
         "setUsersToSendTo",
@@ -16,7 +24,7 @@
     ]);
 
     const formData = reactive({
-         date:new Date();
+         date:"",
          subject:"",
          day:null,
          month:null,
@@ -24,25 +32,80 @@
          time:null
     });
 
+    const textFieldValidationList = [
+        ()=>({
+            fieldName:"subject",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:formData.subject,
+                invalidText:"Please input a subject"
+            }),
+            invalidText:"Please input a subject"
+        }),
+        ()=>({
+            fieldName:"day",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:formData.day,
+                invalidText:"Please input a day in DD format"
+            }),
+            invalidText:"Please input a day in DD format"
+        }),
+        ()=>({
+            fieldName:"month",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:formData.month,
+                invalidText:"Please input a month in MM format"
+            }),
+            invalidText:"Please input a month in MM format"
+        }),
+        ()=>({
+            fieldName:"year",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:formData.year,
+                invalidText:"Please input a yeat in YYYY format"
+            }),
+            invalidText:"Please input a yeat in YYYY format"
+        }),
+        ()=>({
+            fieldName:"time",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:formData.time,
+                invalidText:"Please input a time in HH:MM format"
+            }),
+            invalidText:"Please input a time in HH:MM format"
+        }),
+    ];
+
+    const textValidationObject = reactive({
+        subject: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+        day: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+        month: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+        year: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+        time: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+    });
+
     const formatterObject = {
       day:(val)=>formatDay(val),
       time:(val)=>formatTime(val),
-      month:(val)=>formatYear(val)
+      month:(val)=>formatMonth(val),
+      year:(val)=>formatYear(val)
     };
 
     const setTemplateData = (event)=>{
       const hasFormattingEntry = formatterObject[event.target.name];
-
       if(hasFormattingEntry){
          formData[event.target.name] = formatterObject[event.target.name](event.target.value);
       }else{
          formData[event.target.name] = event.target.name;
       }
-        
     };
 
     const submitEmail = ()=>{
-         const formattedDate = formData.day + "/" + format.month + "/" + format.year;
+         const formattedDate = formData.day + "/" + formData.month + "/" + formData.year;
 
          const formatToDateAsPhraseInput = {
             dateToFormat:formattedDate, 
@@ -55,8 +118,18 @@
             date:formatDateTimeAsPhrase(formatToDateAsPhraseInput)
          };
 
-        $emit("setTemplateParams", dateData);
-        $emit("sendData");
+        const textInputIsValid = validateAllTextFields(textFieldValidationList);
+
+        renderTextFieldValidation({
+            validFieldsList:textInputIsValid.validFieldsList,
+            invalidFieldsList:textInputIsValid.invalidFieldsList,
+            valueToValidateFromValidatorObject:textValidationObject
+        });
+
+        if(textInputIsValid.inputsAreValid){
+            $emit("setTemplateParams", dateData);
+            $emit("sendData");
+        }
     };
 </script>
 <template>
@@ -64,21 +137,50 @@
         <div class="row">
             <div class="col-12">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group mt-2 mb-2">
                         <label for="subject">Subject</label>
-                        <input type="text" name="subject" class="" @change="(event) => setTemplateData(event)"/>
+                        <input type="text" name="subject" :class="textValidationObject.subject.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="textValidationObject.subject.isValid" class="validator">
+                            {{ textValidationObject.subject.invalidText }}
+                        </span>
                     </div>
-                    <div class="form-group">
-                        <label for="subject">Date</label>
-                        <input type="text" name="date" @change="(event) => setTemplateData(event)"/>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="day">Day (input as DD)</label>
+                        <input type="text" name="day" :class="textValidationObject.day.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="textValidationObject.day.isValid" class="validator">
+                            {{ textValidationObject.day.invalidText }}
+                        </span>
+                    </div>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="month">Month (input as MM)</label>
+                        <input type="text" name="month" :class="textValidationObject.month.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="textValidationObject.month.isValid" class="validator">
+                            {{ textValidationObject.month.invalidText }}
+                        </span>
+                    </div>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="year">Year (input as YYYY)</label>
+                        <input type="text" name="year" :class="textValidationObject.year.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="textValidationObject.year.isValid" class="validator">
+                            {{ textValidationObject.year.invalidText }}
+                        </span>
+                    </div>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="time">Time (input as hh:mm)</label>
+                        <input type="text" name="time" :class="textValidationObject.time.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="textValidationObject.time.isValid" class="validator">
+                            {{ textValidationObject.time.invalidText }}
+                        </span>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="row">
-            <button @click="submitEmail" class="btn btn-light app-button">
-                Send Email
-            </button>
+        <div class="row mt-4 mb-4">
+            <div class="col-12">
+                <button @click="submitEmail" class="btn btn-light app-button">
+                    Send Email
+                </button>
+            </div>
         </div>
     </div>
 </template>

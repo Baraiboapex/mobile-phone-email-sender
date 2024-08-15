@@ -1,3 +1,6 @@
+body{
+    font-family:sans-serif;
+}
 .background{
     background-image:url("./images/Japanese_Clasws_Form_Background.png");
     background-repeat: repeat;
@@ -14,7 +17,6 @@
       margin:1em;
       display:flex;
       flex-direction: column;
-      display:flex;
       justify-content: center;
       background:white;
       border:1px solid rgb(51, 48, 48);
@@ -29,7 +31,7 @@
       overflow:scroll;
       background-color: rgba(255, 255, 255, 0.3);
 	}
-    
+
   .message-box{
       margin:1em;
       display:none;
@@ -54,35 +56,20 @@
         background-image: url("./images/japanese-class-logo.png");
         background-size: contain;
         background-repeat: no-repeat;
-        height:9.375em;
+        height:5.375em;
+        object-fit:cover;
     }
 
     .field-group{
     	display:flex;
         flex-direction:column;
-        margin: 0 0 2em 0;
-    }
-    
-    .field-group label{
-    	margin-bottom:0.5em;
-        margin-top:0.5em;
-        letter-spacing:0.2em;
-        font-family:sans-serif;
-        font-weight: bold;
-        color:rgba(107,0,0,1);
-        font-size:2em;
-        display:flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: start;
     }
     
     .text-input{
     	padding:0.5em 0.5em 0.5em 0.5em;
-        background: rgb(255, 255, 255);
-        color:Black;
+        background: white(8, 8, 8);
+        color:black;
         font-size:1rem;
-        letter-spacing: 0.2em; 
         border-width:0.5em;
         border-style: solid;
         border-image: radial-gradient(rgb(255, 255, 255), rgb(168,0,0)) 1;
@@ -97,12 +84,80 @@
         border-image: radial-gradient(rgb(232, 147, 147), rgb(88, 7, 7)) 1;
     }
     
-    .button{
+    .app-button-small{
+        letter-spacing:0.2em;
+        font-family:sans-serif;
+        border-radius:0px;
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
+    .app-button-small:hover{
+        letter-spacing:0.2em;
+        font-family:sans-serif;
+        border-radius:0px;
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
+    .app-button-small:visited{
+        letter-spacing:0.2em;
+        font-family:sans-serif;
+        border-radius:0px;
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
+    .app-button-small:active{
+        letter-spacing:0.2em;
+        font-family:sans-serif;
+        border-radius:0px;
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
+    .cancel{
+        background-color:white!important;
+        color:darkred!important;
+        background-image:none;
+    }
+
+    .app-button:hover{
     	border-radius:0px;
         border:none;
         padding:1em;
         font-family:sans-serif;
         font-size:1em;
+        letter-spacing:0.2em;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+        display:flex;
+        justify-content:center;
+        color:white;
+        cursor:pointer;
+    }
+
+    .app-button{
+    	border-radius:0px;
+        border:none;
+        padding:1em;
+        font-family:sans-serif;
+        font-size:1em;
+        width:100% !important;
+        letter-spacing:0.2em;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+        display:flex;
+        justify-content:center;
+        color:white;
+        cursor:pointer;
+    }
+
+    .app-button:visited{
+    	border-radius:0px;
+        border:none;
+        padding:1em;
+        font-family:sans-serif;
+        font-size:1em;
+        width:100%;
         letter-spacing:0.2em;
         background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
         display:flex;
@@ -133,7 +188,7 @@
         50%{background-image:radial-gradient(circle at top left, rgb(232, 147, 147) -90%, rgb(88, 7, 7) 100%);}
 	}
 
-    .button:active{
+    .app-button:active{
         background-image:radial-gradient(circle at top right, rgb(232, 147, 147) -90%, rgb(88, 7, 7) 100%);
 	}
 

@@ -1,5 +1,12 @@
 <script setup>
-    import {reactive} from "vue";
+    import {reactive, ref} from "vue";
+    import {
+        validateTextInput,
+        validateAllTextFields,
+        renderTextFieldValidation,
+        textRulesNames,
+        DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
+    } from "../../Infra/inputValidator.js";
 
     const emittedEvents = defineEmits([
         "setTemplateParams",
@@ -9,11 +16,28 @@
         "sendData"
     ]);
 
-    const studentsSelected = defineModel();
+    const studentsSelected = ref("");
     const listOfStudentsSelected = ref(false);
-    
+    const textFieldIsValid = ref(false);
+
     const selectedType = reactive({
         mode:""
+    });
+
+    const textFieldValidationList = [
+        ()=>({
+            fieldName:"studentsToSelect",
+            validator:()=>validateTextInput({
+                rule:textRulesNames.REQUIRED_RULE,
+                textValue:studentsSelected.value,
+                invalidText:"Please input student emails to send to"
+            }),
+            invalidText:"Please input student emails to send to"
+        })
+    ];
+
+    const textValidationObject = reactive({
+        studentsToSelect: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     });
 
     const selectListOfStudents = () => {
@@ -22,49 +46,81 @@
 
     const cancelListOfStudentsSelected = () => {
         listOfStudentsSelected.value = false;
+        textValidationObject.studentsToSelect = DEFAULT_TEXT_VALIDATION_OBJECT_VALUE;
     };
 
     const goToTemplateSelection = (event) => {
-        const currentTemplateId = event.target.id;
-        const currentTSelectedTemplate = currentTemplateId.substring(
-            currentTemplateId[2], 
-            currentTemplateId.length - 1
+        const currentTemplateName = event.target.id;
+        const currentSelectedTemplate = currentTemplateName.substring(
+            3, 
+            currentTemplateName.length
         );
 
-        if(studentsSelected.value.length > 0 ){
-            $emit("setUsersToSendTo", studentsSelected.value.join(","));
+        console.log(currentSelectedTemplate);
+
+        const textInputIsValid = validateAllTextFields(textFieldValidationList);
+
+        renderTextFieldValidation({
+            validFieldsList:textInputIsValid.validFieldsList,
+            invalidFieldsList:textInputIsValid.invalidFieldsList,
+            valueToValidateFromValidatorObject:textValidationObject
+        });
+
+        let students = [];
+
+        if(students.includes(",")){
+            students = studentsSelected.value.join(",")
+        }else{
+            students.push(studentsSelected.value);
         }
 
-        $emit("changeCurrentRoute",currentTSelectedTemplate);
+        if(listOfStudentsSelected.value){
+            if(textInputIsValid.inputsAreValid){
+                emittedEvents("setMode",selectedType.mode);
+                emittedEvents("setUsersToSendTo", );
+                emittedEvents("changeCurrentRoute",currentSelectedTemplate);
+            }
+        }else{
+            emittedEvents("setMode",selectedType.mode);
+            emittedEvents("changeCurrentRoute",currentSelectedTemplate);
+        }
     }
 
 </script>
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <h1>Please how you wish to send your emails</h1>
-                <hr/>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                    <h3>Please describe how you wish to send your emails</h3>
+                    <hr/>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 d-flex justify-content-center">
-                <button id="setSelectTemplate" @click="goToTemplateSelection" class="btn btn-light app-button">Send to selected students</button>
+        <div class="row mt-2">
+            <div class="col-12">
+                <button id="setSelectTemplate" @click="goToTemplateSelection" class="btn btn-light app-button w-100">Send to selected students</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 d-flex flex-column justify-content-center">
+        <div class="row mt-2 mb-4">
+            <div class="col-sm-12">
                 <button @click="selectListOfStudents" class="btn btn-light app-button">Send to selected students</button>
-                <div v-if="listOfStudentsSelected" class="container-fluid p-0">
-                    <div class="form-group">
-                        <label for="studentsToSelect d-flex flex-wrap">
-                            Plese type in the list of students to select with each student email separated by a comma.
-                        </label>
-                        <input type="text" name="studentsToSelect" v-model="studentsSelected" class="textField"/>
-                    </div>
-                    <div class="d-flex flex-row align-items-center justify-content-start">
-                        <button @click="cancelListOfStudentsSelected" class="btn btn-light app-button-small">Cancel</button>
-                        <button @click="goToTemplateSelection" class="btn btn-light app-button-small">Continue</button>
+                <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+                    <div v-if="listOfStudentsSelected" class="container-fluid p-0 mt-4">
+                        <div class="field-group">
+                            <label for="studentsToSelect d-flex flex-wrap m-1">
+                                Please type in the list of students to select with each student email separated by a comma.
+                            </label>
+                            <textarea type="text" :class="textValidationObject.studentsToSelect.classValue + ' w-100 m-1 text-input'" name="studentsToSelect" v-model="studentsSelected"></textarea>
+                            <span v-if="!textValidationObject.studentsToSelect.isValid" class="validator m-1">
+                                {{ textValidationObject.studentsToSelect.invalidText }}
+                            </span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center justify-content-start m-1">
+                            <button @click="cancelListOfStudentsSelected" class="btn btn-danger app-button-small cancel">Cancel</button>
+                            <span>&nbsp;&nbsp;</span>
+                            <button id="setSelectTemplate" @click="goToTemplateSelection" class="btn btn-danger app-button-small">Continue</button>
+                        </div>
                     </div>
                 </div>
             </div>

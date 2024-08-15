@@ -7,7 +7,7 @@ import SendTypeTemplate from "../../Pages/SendTypeTemplate.vue";
 
 import { defineStore } from "pinia";
 
-const PageNames = {
+export const PageNames = {
     ANNOUNCEMENT_TEMPLATE_NAME:"AnnouncementTemplate",
     CLASS_RESTARTING_TEMPLATE_NAME:"ClassRestartingTemplate",
     CUSTOM_TEMPLATE:"CustomTemplate",
@@ -16,7 +16,7 @@ const PageNames = {
     SELECT_TEMPLATE_NAME:"SelectTemplate"
 };
 
-const Routes = {
+export const Routes = {
     AnnouncementTemplate,
     ClassRestartingTemplate,
     CustomTemplate,
@@ -25,9 +25,9 @@ const Routes = {
     SendTypeTemplate
 };
 
-const CurrentPageStore = defineStore("CurrentPage", {
+export const CurrentPageStore = defineStore("CurrentPage", {
     state:()=>{
-        return {currentPage:Routes[PageNames.NO_CLASS_TEMPLATE_NAME]}
+        return {currentPage:Routes[PageNames.SEND_TYPE_TEMPLATE_NAME]}
     },
     actions:{
         updatePage(pageName){
@@ -38,9 +38,3 @@ const CurrentPageStore = defineStore("CurrentPage", {
         getCurrentPage:(state)=>state.currentPage
     }
 });
-
-export default {
-    CurrentPageStore,
-    PageNames,
-    Routes
-}
