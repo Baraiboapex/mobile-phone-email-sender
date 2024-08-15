@@ -8,13 +8,14 @@
     const { getCurrentPage } = storeToRefs(store);
 
     function changeCurrentRoute(route){
-        console.log(route);
         store.updatePage(route);
     }
 </script>
 <template>
-    <component
-        @change-current-route="changeCurrentRoute" 
-        :is="getCurrentPage"
-    ></component>
+    <div class="d-flex justify-content-center">
+        <component
+            @change-current-route="changeCurrentRoute" 
+            :is="getCurrentPage"
+        ></component>
+    </div>
 </template>

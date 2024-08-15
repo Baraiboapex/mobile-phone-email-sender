@@ -27,11 +27,40 @@ export const Routes = {
 
 export const CurrentPageStore = defineStore("CurrentPage", {
     state:()=>{
-        return {currentPage:Routes[PageNames.SEND_TYPE_TEMPLATE_NAME]}
+        return {
+            currentPage:Routes[PageNames.SEND_TYPE_TEMPLATE_NAME],
+            visitedPages:{}
+        }
     },
     actions:{
         updatePage(pageName){
             this.currentPage = Routes[pageName];
+
+            let hasVisitedPage = this.visitedPages[pageName];
+            
+            if(hasVisitedPage){
+                delete this.visitedPages[pageName]
+            }else{
+                this.visitedPages = {...this.visitedPages, ...Routes[pageName]}
+            }
+        },
+        goForwardOnePage(currentPage){
+            const pageKeys = Object.keys(Routes);
+            pageKeys.forEach((page)=>{
+                if(page === currentPage){
+                    let pageAfterCurrentPage = pageKeys[pageKeys.indexOf(currentPage) + 1];
+                    this.currentPage = Routes[pageAfterCurrentPage];
+                }
+            });
+        },
+        goBackOnePage(currentPage){
+            const pageKeys = Object.keys(Routes);
+            pageKeys.forEach((page)=>{
+                if(page === currentPage){
+                    let pageBeforeCurrentPage = pageKeys[pageKeys.indexOf(currentPage) - 1];
+                    this.currentPage = Routes[pageBeforeCurrentPage];
+                }
+            });
         }
     },
     getters:{

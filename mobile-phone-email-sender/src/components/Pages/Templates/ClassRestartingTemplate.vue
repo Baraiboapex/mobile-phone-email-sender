@@ -1,11 +1,7 @@
 <script setup>
    import {reactive, computed, inject} from "vue";
    import {
-      formatDateTimeAsPhrase,
-      formatTime,
-      formatMonth,
-      formatDay,
-      formatYear
+      formatDateTimeAsPhrase
     } from "../../../helpers/formatHelpers/dateFormatHelper.js";
 
     import {
@@ -86,30 +82,20 @@
         time: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
     });
 
-    const formatterObject = {
-      day:(val)=>formatDay(val),
-      time:(val)=>formatTime(val),
-      month:(val)=>formatMonth(val),
-      year:(val)=>formatYear(val)
-    };
-
     const setTemplateData = (event)=>{
-      const hasFormattingEntry = formatterObject[event.target.name];
-      if(hasFormattingEntry){
-         formData[event.target.name] = formatterObject[event.target.name](event.target.value);
-      }else{
-         formData[event.target.name] = event.target.name;
-      }
+      formData[event.target.name] = event.target.value;
     };
 
     const submitEmail = ()=>{
-         const formattedDate = formData.day + "/" + formData.month + "/" + formData.year;
+         const formattedDate = formData.month + "/" + formData.day + "/" + formData.year;
 
          const formatToDateAsPhraseInput = {
             dateToFormat:formattedDate, 
             timeToFormat:formData.time, 
             joiningWord:"at"
          };
+         
+         console.log(formatToDateAsPhraseInput);
 
         const dateData = {
             subject:formData.subject,
@@ -138,35 +124,35 @@
                     <div class="form-group mt-2 mb-2">
                         <label for="subject">Subject</label>
                         <input type="text" name="subject" :class="textValidationObject.subject.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.subject.isValid" class="validator">
+                        <span v-if="!textValidationObject.subject.isValid" class="validator">
                             {{ textValidationObject.subject.invalidText }}
                         </span>
                     </div>
                     <div class="form-group mt-2 mb-2">
                         <label for="day">Day (input as DD)</label>
                         <input type="text" name="day" :class="textValidationObject.day.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.day.isValid" class="validator">
+                        <span v-if="!textValidationObject.day.isValid" class="validator">
                             {{ textValidationObject.day.invalidText }}
                         </span>
                     </div>
                     <div class="form-group mt-2 mb-2">
                         <label for="month">Month (input as MM)</label>
                         <input type="text" name="month" :class="textValidationObject.month.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.month.isValid" class="validator">
+                        <span v-if="!textValidationObject.month.isValid" class="validator">
                             {{ textValidationObject.month.invalidText }}
                         </span>
                     </div>
                     <div class="form-group mt-2 mb-2">
                         <label for="year">Year (input as YYYY)</label>
                         <input type="text" name="year" :class="textValidationObject.year.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.year.isValid" class="validator">
+                        <span v-if="!textValidationObject.year.isValid" class="validator">
                             {{ textValidationObject.year.invalidText }}
                         </span>
                     </div>
                     <div class="form-group mt-2 mb-2">
-                        <label for="time">Time (input as hh:mm)</label>
+                        <label for="time">Time (input as h:mm am/pm)</label>
                         <input type="text" name="time" :class="textValidationObject.time.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.time.isValid" class="validator">
+                        <span v-if="!textValidationObject.time.isValid" class="validator">
                             {{ textValidationObject.time.invalidText }}
                         </span>
                     </div>

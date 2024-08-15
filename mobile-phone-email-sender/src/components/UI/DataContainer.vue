@@ -98,7 +98,7 @@
             dataSentSuccessfully.value = true;
             popToast();
         }catch(err){
-            pageIsLoading.value = true;
+            pageIsLoading.value = false;
             dataSentSuccessfully.value = false;
             popToast();
         }

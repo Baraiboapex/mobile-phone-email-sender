@@ -1,5 +1,5 @@
 <script setup>
-    import {reactive, computed} from "vue";
+    import {reactive, computed, inject} from "vue";
     import {
         validateTextInput,
         validateAllTextFields,
@@ -16,17 +16,17 @@
     const textFieldValidationList = [
         ()=>({
             fieldName:"header",
-            validator:validateTextInput({
+            validator:()=>validateTextInput({
                 rule:textRulesNames.REQUIRED_RULE,
-                textValue:studentsSelected.value,
+                textValue:formData.customMessageHeaderValue,
                 invalidText:"Please input a message header/subject"
             })
         }),
         ()=>({
             fieldName:"message",
-            validator:validateTextInput({
+            validator:()=>validateTextInput({
                 rule:textRulesNames.REQUIRED_RULE,
-                textValue:studentsSelected.value,
+                textValue:formData.customMessageValue,
                 invalidText:"Please type a message to be used in your email"
             })
         })
@@ -68,14 +68,14 @@
                 <form>
                     <div class="form-group">
                         <label for="header">Subject</label>
-                        <input type="text" name="customMessageHeaderValuer" :class="textValidationObject.customMessageValue.classValue" @change="(event) => setTemplateData(event)"/>
+                        <input type="text" name="customMessageHeaderValue" :class="textValidationObject.customMessageValue.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
                         <span v-if="textValidationObject.customMessageHeaderValue.isValid" class="validator">
                             {{ textValidationObject.customMessageHeaderValue.invalidText }}
                         </span>
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea type="text" name="customMessageValue" :class="textValidationObject.customMessageValue.classValue" @change="(event) => setTemplateData(event)"></textarea>
+                        <textarea type="text" name="customMessageValue" :class="textValidationObject.customMessageValue.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"></textarea>
                         <span v-if="textValidationObject.customMessageValue.isValid" class="validator">
                             {{ textValidationObject.customMessageValue.invalidText }}
                         </span>
