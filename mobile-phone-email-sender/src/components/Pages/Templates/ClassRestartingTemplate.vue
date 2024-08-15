@@ -1,5 +1,5 @@
 <script setup>
-   import {reactive, computed} from "vue";
+   import {reactive, computed, inject} from "vue";
    import {
       formatDateTimeAsPhrase,
       formatTime,
@@ -7,6 +7,7 @@
       formatDay,
       formatYear
     } from "../../../helpers/formatHelpers/dateFormatHelper.js";
+
     import {
         validateTextInput,
         validateAllTextFields,
@@ -15,13 +16,10 @@
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     } from "../../../Infra/inputValidator.js";
 
-   const emittedEvents = defineEmits([
-        "setTemplateParams",
-        "setUsersToSendTo",
-        "setSelectedTemplate",
-        "setMode",
-        "sendData"
-    ]);
+   const {
+        setTemplateParams,
+        sendData
+    } = inject("dataUpdaters");
 
     const formData = reactive({
          date:"",
@@ -113,10 +111,10 @@
             joiningWord:"at"
          };
 
-         const dateData = {
+        const dateData = {
             subject:formData.subject,
             date:formatDateTimeAsPhrase(formatToDateAsPhraseInput)
-         };
+        };
 
         const textInputIsValid = validateAllTextFields(textFieldValidationList);
 
@@ -127,8 +125,8 @@
         });
 
         if(textInputIsValid.inputsAreValid){
-            $emit("setTemplateParams", dateData);
-            $emit("sendData");
+            setTemplateParams(dateData);
+            sendData();
         }
     };
 </script>

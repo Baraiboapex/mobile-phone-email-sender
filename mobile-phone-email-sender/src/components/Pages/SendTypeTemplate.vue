@@ -1,5 +1,5 @@
 <script setup>
-    import {reactive, ref} from "vue";
+    import {reactive, ref, inject} from "vue";
     import {
         validateTextInput,
         validateAllTextFields,
@@ -8,21 +8,18 @@
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     } from "../../Infra/inputValidator.js";
 
+    const {
+        setUsersToSendTo,
+        setMode
+    } = inject("dataUpdaters");
+
     const emittedEvents = defineEmits([
-        "setTemplateParams",
-        "setUsersToSendTo",
-        "setSelectedTemplate",
-        "setMode",
-        "sendData"
+        "changeCurrentRoute"
     ]);
 
     const studentsSelected = ref("");
     const listOfStudentsSelected = ref(false);
     const textFieldIsValid = ref(false);
-
-    const selectedType = reactive({
-        mode:""
-    });
 
     const textFieldValidationList = [
         ()=>({
@@ -51,6 +48,7 @@
 
     const goToTemplateSelection = (event) => {
         const currentTemplateName = event.target.id;
+        const currentMode = event.target.name;
         const currentSelectedTemplate = currentTemplateName.substring(
             3, 
             currentTemplateName.length
@@ -76,12 +74,12 @@
 
         if(listOfStudentsSelected.value){
             if(textInputIsValid.inputsAreValid){
-                emittedEvents("setMode",selectedType.mode);
-                emittedEvents("setUsersToSendTo", );
+                setMode(currentMode);
+                setUsersToSendTo(students);
                 emittedEvents("changeCurrentRoute",currentSelectedTemplate);
             }
         }else{
-            emittedEvents("setMode",selectedType.mode);
+            setMode(currentMode);
             emittedEvents("changeCurrentRoute",currentSelectedTemplate);
         }
     }
@@ -99,7 +97,7 @@
         </div>
         <div class="row mt-2">
             <div class="col-12">
-                <button id="setSelectTemplate" @click="goToTemplateSelection" class="btn btn-light app-button w-100">Send to selected students</button>
+                <button id="setSelectTemplate" @click="goToTemplateSelection" name="SendEmailsToAll" class="btn btn-light app-button w-100">Send to all students</button>
             </div>
         </div>
         <div class="row mt-2 mb-4">
@@ -119,7 +117,7 @@
                         <div class="d-flex flex-row align-items-center justify-content-start m-1">
                             <button @click="cancelListOfStudentsSelected" class="btn btn-danger app-button-small cancel">Cancel</button>
                             <span>&nbsp;&nbsp;</span>
-                            <button id="setSelectTemplate" @click="goToTemplateSelection" class="btn btn-danger app-button-small">Continue</button>
+                            <button id="setSelectTemplate" name="SendEmailsToSelected" @click="goToTemplateSelection" class="btn btn-danger app-button-small">Continue</button>
                         </div>
                     </div>
                 </div>

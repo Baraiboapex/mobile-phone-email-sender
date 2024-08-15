@@ -12,12 +12,7 @@
                 <div v-if="pageIsLoaded">
                     <slot  
                         name="data"
-                        :dataToSend="dataToSend" 
-                        @set-template-params="setTemplateParams"
-                        @set-users-to-send-to="setUsersToSendTo"
-                        @set-selected-template="setSelectedTemplate"
-                        @set-mode="setMode"
-                        @send-data="sendData"
+                        :dataToSend="dataToSend"
                     ></slot>
                 </div>
                 <div v-else>
@@ -31,7 +26,7 @@
     </div>
 </template>
 <script setup>
-    import {ref, reactive, computed} from "vue";
+    import {ref, reactive, computed, provide} from "vue";
     import {makeSecureApiCall} from "../../Infra/httpSecurityBinder";
     import api from "../../Infra/apiCompnent";
 
@@ -59,22 +54,22 @@
 
     const setTemplateParams = (params)=>{
         console.log(params);
-        data.templateParams = params;
+        dataToSend.templateParams = params;
     }
 
     const setUsersToSendTo = (users) => {
         console.log(users);
-        data.usersToSendTo = users;
+        dataToSend.usersToSendTo = users;
     }
 
     const setSelectedTemplate = (template) => {
         console.log(template);
-        data.selectedTemplate = template;
+        dataToSend.selectedTemplate = template;
     }
 
     const setMode = (mode) => {
-        console.log(mode);
-        data.mode = mode;
+        console.log("TEST ==>",mode);
+        dataToSend.mode = mode;
     }
 
     const popToast = () => {
@@ -86,26 +81,34 @@
 
     const sendData = async () => {
         console.log("SENDING DATA ===>", dataToSend);
-        // try{
-        //     pageIsLoading.value = true;
-        //     await makeSecureApiCall({
-        //         apiObject:api,
-        //         callBody:dataToSend,
-        //         headers:{
-        //         "Content-Type": "application/json",
-        //         },
-        //         method:"post",
-        //         otherConfig:{
-        //             redirect: "follow",
-        //         }
-        //     });
-        //     pageIsLoading.value = false;
-        //     dataSentSuccessfully.value = true;
-        //     popToast();
-        // }catch(err){
-        //     pageIsLoading.value = true;
-        //     dataSentSuccessfully.value = false;
-        //     popToast();
-        // }
+        try{
+            pageIsLoading.value = true;
+            await makeSecureApiCall({
+                apiObject:api,
+                callBody:dataToSend,
+                headers:{
+                "Content-Type": "application/json",
+                },
+                method:"post",
+                otherConfig:{
+                    redirect: "follow",
+                }
+            });
+            pageIsLoading.value = false;
+            dataSentSuccessfully.value = true;
+            popToast();
+        }catch(err){
+            pageIsLoading.value = true;
+            dataSentSuccessfully.value = false;
+            popToast();
+        }
     }
+
+    provide("dataUpdaters",{
+        setTemplateParams,
+        setUsersToSendTo,
+        setSelectedTemplate,
+        setMode,
+        sendData
+    });
 </script>

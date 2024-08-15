@@ -1,5 +1,5 @@
 <script setup>
-    import {reactive, computed} from "vue";
+    import {reactive, computed, inject} from "vue";
     import {
         validateTextInput,
         validateAllTextFields,
@@ -8,13 +8,10 @@
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     } from "../../../Infra/inputValidator.js";
 
-    const emittedEvents = defineEmits([
-        "setTemplateParams",
-        "setUsersToSendTo",
-        "setSelectedTemplate",
-        "setMode",
-        "sendData"
-    ]);
+    const {
+        setTemplateParams,
+        sendData
+    } = inject("dataUpdaters");
 
     const formData = reactive({
         subject:"",

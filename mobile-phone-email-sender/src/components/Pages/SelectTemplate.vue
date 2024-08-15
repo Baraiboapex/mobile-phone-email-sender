@@ -1,14 +1,13 @@
 <script setup>
-    import {computed} from "vue";
+    import {computed, inject} from "vue";
 
     const emittedEvents = defineEmits([
-        "setTemplateParams",
-        "setUsersToSendTo",
-        "setSelectedTemplate",
-        "setMode",
-        "sendData",
         "changeCurrentRoute"
     ]);
+
+    const {
+        setSelectedTemplate,
+    } = inject("dataUpdaters");
 
     const selectTemplate = (event)=>{
         const currentTemplateName = event.target.id;
@@ -17,7 +16,7 @@
             currentTemplateName.length
         );
 
-        emittedEvents("setSelectedTemplate",currentSelectedTemplate);
+        setSelectedTemplate(currentSelectedTemplate);
         emittedEvents("changeCurrentRoute",currentSelectedTemplate);
     };
 

@@ -8,13 +8,10 @@
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     } from "../../../Infra/inputValidator.js";
 
-    const emittedEvents = defineEmits([
-        "setTemplateParams",
-        "setUsersToSendTo",
-        "setSelectedTemplate",
-        "setMode",
-        "sendData"
-    ]);
+    const {
+        setTemplateParams,
+        sendData
+    } = inject("dataUpdaters");
 
     const textFieldValidationList = [
         ()=>({
@@ -59,8 +56,8 @@
         });
 
         if(textInputIsValid){
-            $emit("setTemplateParams", formData);
-            $emit("sendData");
+            setTemplateParams(formData);
+            sendData();
         }
     };
 </script>
