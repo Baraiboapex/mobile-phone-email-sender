@@ -1,6 +1,7 @@
 <script setup>
   import Router from "./components/UI/Router/Router.vue";
   import DataContainer from "./components/UI/DataContainer.vue";
+  import VisitedPageNavbar from "./components/UI/VisitedPageNavbar.vue";
 </script>
 <template>
   <div class="background">
@@ -9,6 +10,7 @@
         <div class="col-12">
           <div class="d-flex justify-content-center">
           <div class="form">
+            <VisitedPageNavbar/>
             <div class="logo mb-4"></div>
             <DataContainer>
               <template #data="data">

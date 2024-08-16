@@ -15,7 +15,7 @@
                         :dataToSend="dataToSend"
                     ></slot>
                 </div>
-                <div v-else>
+                <div class="d-flex align-items-center" v-else>
                     <section class="message message-box" id="loadingMessage">
                         <h3 id="loadingMessageText">Sending Data</h3>
                         <h2 class="spinner-border" role="status"></h2>
@@ -53,12 +53,10 @@
     });
 
     const setTemplateParams = (params)=>{
-        console.log(params);
         dataToSend.templateParams = params;
     }
 
     const setUsersToSendTo = (users) => {
-        console.log(users);
         dataToSend.usersToSendTo = users;
     }
 
@@ -68,7 +66,6 @@
     }
 
     const setMode = (mode) => {
-        console.log("TEST ==>",mode);
         dataToSend.mode = mode;
     }
 
@@ -80,18 +77,19 @@
     }
 
     const sendData = async () => {
-        console.log("SENDING DATA ===>", dataToSend);
+        console.log(dataToSend);
         try{
             pageIsLoading.value = true;
             await makeSecureApiCall({
                 apiObject:api,
                 callBody:dataToSend,
                 headers:{
-                "Content-Type": "application/json",
+                    "Content-Type": "application/json",
                 },
                 method:"post",
                 otherConfig:{
                     redirect: "follow",
+                    mode:"no-cors"
                 }
             });
             pageIsLoading.value = false;

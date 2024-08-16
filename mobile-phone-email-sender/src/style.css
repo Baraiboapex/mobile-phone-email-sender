@@ -65,6 +65,33 @@ body{
         flex-direction:column;
     }
     
+    .app-btn-nav{
+        font-size:0.7em;
+        letter-spacing:0.10em;
+        margin:0 0.2em 0 0.2em !important;
+        border-radius: 0 !important;
+        background-color:white!important;
+        color:darkred!important;
+        background-image:none;
+    }
+
+    .app-btn-nav:hover{
+        font-size:0.7em;
+        letter-spacing:0.10em;
+        border-radius: 0 !important;
+        color:white!important;
+        background-color:white!important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
+    .app-btn-nav:visited{
+        font-size:0.7em;
+        letter-spacing:0.10em;
+        border-radius: 0 !important;
+        color:white!important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+    }
+
     .text-input{
     	padding:0.5em 0.5em 0.5em 0.5em;
         background: white(8, 8, 8);

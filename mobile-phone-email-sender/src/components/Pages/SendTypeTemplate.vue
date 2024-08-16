@@ -1,5 +1,8 @@
 <script setup>
-    import {reactive, ref, inject} from "vue";
+    import {reactive, ref, inject, onMounted} from "vue";
+    import {
+        CurrentPageStore
+    } from "../UI/Router/Routes.js"
     import {
         validateTextInput,
         validateAllTextFields,
@@ -12,6 +15,7 @@
         setUsersToSendTo,
         setMode
     } = inject("dataUpdaters");
+    const store = CurrentPageStore();
 
     const emittedEvents = defineEmits([
         "changeCurrentRoute"
@@ -37,6 +41,10 @@
         studentsToSelect: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     });
 
+    onMounted(()=>{
+        store.updatePage("SendTypeTemplate");
+    });
+
     const selectListOfStudents = () => {
         listOfStudentsSelected.value = true;
     };
@@ -53,8 +61,6 @@
             3, 
             currentTemplateName.length
         );
-
-        console.log(currentSelectedTemplate);
 
         const textInputIsValid = validateAllTextFields(textFieldValidationList);
 

@@ -26,17 +26,17 @@
     const textFieldValidationList = [
         ()=>({
             fieldName:"subject",
-            validator:validateTextInput({
+            validator:()=>validateTextInput({
                 rule:textRulesNames.REQUIRED_RULE,
-                textValue:studentsSelected.value,
+                textValue:formData.subject,
                 invalidText:"Please input a template type"
             })
         }),
         ()=>({
             fieldName:"reason",
-            validator:validateTextInput({
+            validator:()=>validateTextInput({
                 rule:textRulesNames.REQUIRED_RULE,
-                textValue:studentsSelected.value,
+                textValue:formData.reason,
                 invalidText:"Please input a template type"
             })
         }),

@@ -95,8 +95,6 @@
             joiningWord:"at"
          };
          
-         console.log(formatToDateAsPhraseInput);
-
         const dateData = {
             subject:formData.subject,
             date:formatDateTimeAsPhrase(formatToDateAsPhraseInput)

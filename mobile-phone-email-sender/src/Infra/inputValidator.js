@@ -42,7 +42,6 @@ export const validateAllTextFields = (list)=>{
 
     list.forEach((field)=>{
         const callValidator = field().validator().isValid;
-        console.log(field());
         if(callValidator){
             validatedFields++;
             validFieldsList.push({

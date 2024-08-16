@@ -6,6 +6,13 @@ async function setupFetch({
     headers
 }){
     return new Promise(async (resolve, reject)=>{
+        console.log({
+            url,
+            body,
+            otherConfig,
+            method,
+            headers
+        });
         try{
             const fetchData = await fetch(
                 url,{
@@ -15,6 +22,14 @@ async function setupFetch({
                     ...otherConfig
                 }
             );
+
+            console.log({
+                method,
+                body,
+                headers,
+                ...otherConfig
+            });
+
             const parsedData = await parseResponseData({
                 resp:fetchData,
             });
@@ -25,7 +40,7 @@ async function setupFetch({
 
             resolve(getFinalData);
         }catch(err){
-            consdole.error("Could not get data from server");
+            console.error("Could not get data from server");
             reject(err);
         }
     }) 

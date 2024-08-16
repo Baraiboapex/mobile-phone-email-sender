@@ -39,9 +39,26 @@ export const CurrentPageStore = defineStore("CurrentPage", {
             let hasVisitedPage = this.visitedPages[pageName];
             
             if(hasVisitedPage){
-                delete this.visitedPages[pageName]
+                //delete this.visitedPages[pageName]
+                const pages = Object.keys(this.visitedPages);
+                const indexOfSelectedPage = pages.indexOf(pageName);
+
+                const filteredPages = pages.filter(page => pages.indexOf(page) !== indexOfSelectedPage + 1);
+
+                const newObject = {};
+
+                filteredPages.forEach(page=>{
+                    newObject[page] = page;
+                });
+
+                this.visitedPages = newObject;
+                
             }else{
-                this.visitedPages = {...this.visitedPages, ...Routes[pageName]}
+                const newObject = {};
+                
+                newObject[pageName] = pageName;
+
+                this.visitedPages = {...this.visitedPages, ...newObject};
             }
         },
         goForwardOnePage(currentPage){

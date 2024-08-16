@@ -1,5 +1,7 @@
-const CURRENT_PROXY_URL = "https://mb-cors-proxy.fly.dev/";
-const CURRENT_SECURITY_SERVER_URL = "https://sum-auth-server-aged-smoke-7979.fly.dev/solution";
+const CURRENT_PROXY_URL = "http://localhost:3002/solution";
+const CURRENT_SECURITY_SERVER_URL = "http://localhost:3000/solution";
+
+import { markRaw } from "vue";
 
 async function getCurrentSolution({proxyUrl}){
     const config = {
@@ -8,29 +10,42 @@ async function getCurrentSolution({proxyUrl}){
           "Target-URL":CURRENT_SECURITY_SERVER_URL
         }
     };
-    return fetch(proxyUrl, config);
+    return new Promise(async(resolve, reject)=>{
+        const results = await fetch(proxyUrl, config);
+        results.ok ? resolve(results.json()) : reject(null);
+    });
 }
 
 async function postCurrentSolutionToGetSecrets({proxyUrl, solution}){
+
+    const objectToSend = {
+        k:solution.sol_k,
+        side:solution.sid
+    };
+
     const config = {
         method:"POST",
-        body:JSON.stringify(solution),
+        body:JSON.stringify(objectToSend),
         headers: {
-        "Content-Type": "application/json",
-        "Target-URL":CURRENT_SECURITY_SERVER_URL
+            "Content-Type": "application/json",
+            "Target-URL":CURRENT_SECURITY_SERVER_URL
         }
     };
-    return fetch(proxyUrl, config);
+    return new Promise(async(resolve, reject)=>{
+        const results = await fetch(proxyUrl, config);
+        results.ok ? resolve(results.json()) : reject(null);
+    });
 }
 
 export async function makeSecureApiCall({
-    apiObject,
+    apiObject,  
     callBody,
     headers,
     method,
     otherConfig
 }){
     try{
+
         const getSecuritySolution = await getCurrentSolution({
             proxyUrl:CURRENT_PROXY_URL
         });
@@ -39,9 +54,9 @@ export async function makeSecureApiCall({
             proxyUrl:CURRENT_PROXY_URL,
             solution:getSecuritySolution
         });
-    
+        
         const config = {
-            url:securitySolutionSecrets.u,
+            url:securitySolutionSecrets.$sec.u,
             method,
         };
     
@@ -52,13 +67,15 @@ export async function makeSecureApiCall({
         }
     
         if(callBody !== null && callBody !== undefined){
-            config.body = callBody;
+            config.body = JSON.stringify(markRaw(callBody));
         }
     
         if(otherConfig !== null && otherConfig !== undefined){
-            customConfigObject = { ...config, ...otherConfig};
+            customConfigObject = { ...config, otherConfig};
         }
         
+        console.log(securitySolutionSecrets.$sec.u);
+
         const basicApiCall = await apiObject[method]((otherConfig !== null ? customConfigObject : config));
 
         return basicApiCall;
