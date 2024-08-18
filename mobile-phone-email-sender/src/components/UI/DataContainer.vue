@@ -15,7 +15,7 @@
                         :dataToSend="dataToSend"
                     ></slot>
                 </div>
-                <div class="d-flex align-items-center" v-else>
+                <div v-else class="d-flex align-items-center">
                     <section class="message message-box" id="loadingMessage">
                         <h3 id="loadingMessageText">Sending Data</h3>
                         <h2 class="spinner-border" role="status"></h2>
@@ -90,7 +90,8 @@
                 otherConfig:{
                     redirect: "follow",
                     mode:"no-cors"
-                }
+                },
+                secretObjectKey:"u"
             });
             pageIsLoading.value = false;
             dataSentSuccessfully.value = true;

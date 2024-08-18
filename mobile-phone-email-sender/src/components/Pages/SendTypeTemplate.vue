@@ -1,7 +1,7 @@
 <script setup>
-    import {reactive, ref, inject, onMounted} from "vue";
+    import {reactive, ref, inject} from "vue";
     import {
-        CurrentPageStore
+        CurrentPageStore,
     } from "../UI/Router/Routes.js"
     import {
         validateTextInput,
@@ -9,7 +9,7 @@
         renderTextFieldValidation,
         textRulesNames,
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../Infra/inputValidator.js";
+    } from "../../helpers/inputValidation/inputValidator.js";
 
     const {
         setUsersToSendTo,
@@ -23,26 +23,42 @@
 
     const studentsSelected = ref("");
     const listOfStudentsSelected = ref(false);
-    const textFieldIsValid = ref(false);
 
     const textFieldValidationList = [
         ()=>({
             fieldName:"studentsToSelect",
-            validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
-                textValue:studentsSelected.value,
-                invalidText:"Please input student emails to send to"
+            validator:()=>validateAllEmails({
+                value:studentsSelected.value
             }),
-            invalidText:"Please input student emails to send to"
+            invalidText:"Please input valid student emails to send to"
         })
     ];
+    
+    const validateAllEmails = ({value}) => {
+        const currentSelectedEmails = value;
+        const emailsArray = currentSelectedEmails.split(", ");
+        const emailsArrayLength = emailsArray.length;
+
+        let totalValidatedEmails = 0;
+
+        emailsArray.forEach((email) => {
+            const emailIsCorrect = validateTextInput({
+                rules: [textRulesNames.VALID_EMAIL_RULE, textRulesNames.REQUIRED_RULE],
+                textValue: email,
+            });
+
+            if (emailIsCorrect.isValid) {
+                totalValidatedEmails++;
+            }
+        });
+
+        let allEmailsValidated = totalValidatedEmails >= emailsArrayLength;
+
+        return {isValid:allEmailsValidated};
+    }
 
     const textValidationObject = reactive({
         studentsToSelect: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    });
-
-    onMounted(()=>{
-        store.updatePage("SendTypeTemplate");
     });
 
     const selectListOfStudents = () => {
@@ -92,7 +108,7 @@
 
 </script>
 <template>
-    <div class="container">
+    <div class="container w-100">
         <div class="row mt-4">
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center align-items-center">

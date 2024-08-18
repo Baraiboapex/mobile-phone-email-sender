@@ -12,7 +12,7 @@
     }
 </script>
 <template>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex">
         <component
             @change-current-route="changeCurrentRoute" 
             :is="getCurrentPage"

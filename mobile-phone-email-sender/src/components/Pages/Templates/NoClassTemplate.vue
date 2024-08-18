@@ -6,7 +6,7 @@
         renderTextFieldValidation,
         textRulesNames,
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../../Infra/inputValidator.js";
+    } from "../../../helpers/inputValidation/inputValidator";
 
     const {
         setTemplateParams,
@@ -27,18 +27,18 @@
         ()=>({
             fieldName:"subject",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[textRulesNames.REQUIRED_RULE],
                 textValue:formData.subject,
-                invalidText:"Please input a template type"
-            })
+            }),
+            invalidText:"Please input a template type"
         }),
         ()=>({
             fieldName:"reason",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[textRulesNames.REQUIRED_RULE],
                 textValue:formData.reason,
-                invalidText:"Please input a template type"
-            })
+            }),
+            invalidText:"Please input a template type"
         }),
     ];
 
@@ -63,21 +63,21 @@
     
 </script>
 <template>
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 w-100">
         <div class="row">
             <div class="col-12">
                 <form>
                     <div class="form-group mt-2 mb-2">
                         <label for="subject">Subject</label>
                         <input type="text" name="subject" :class="textValidationObject.subject.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.subject.isValid" class="validator">
+                        <span v-if="!textValidationObject.subject.isValid" class="validator">
                             {{ textValidationObject.subject.invalidText }}
                         </span>
                     </div>
                     <div class="form-groupmt-2 mb-2 ">
                         <label for="reason">Reason For No Class</label>
                         <input type="text" name="reason" :class="textValidationObject.reason.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.reason.isValid" class="validator">
+                        <span v-if="!textValidationObject.reason.isValid" class="validator">
                             {{ textValidationObject.reason.invalidText }}
                         </span>
                     </div>

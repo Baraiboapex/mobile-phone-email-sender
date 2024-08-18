@@ -6,7 +6,7 @@
         renderTextFieldValidation,
         textRulesNames,
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../../Infra/inputValidator.js";
+    } from "../../../helpers/inputValidation/inputValidator";
 
     const {
         setTemplateParams,
@@ -15,20 +15,20 @@
 
     const textFieldValidationList = [
         ()=>({
-            fieldName:"header",
+            fieldName:"customMessageHeaderValue",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[textRulesNames.REQUIRED_RULE],
                 textValue:formData.customMessageHeaderValue,
-                invalidText:"Please input a message header/subject"
-            })
+            }),
+            invalidText:"Please input a message header/subject"
         }),
         ()=>({
-            fieldName:"message",
+            fieldName:"customMessageValue",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[textRulesNames.REQUIRED_RULE],
                 textValue:formData.customMessageValue,
-                invalidText:"Please type a message to be used in your email"
-            })
+            }),
+            invalidText:"Please type a message to be used in your email"
         })
     ];
 
@@ -55,38 +55,40 @@
             valueToValidateFromValidatorObject:textValidationObject
         });
 
-        if(textInputIsValid){
+        if(textInputIsValid.inputsAreValid){
             setTemplateParams(formData);
             sendData();
         }
     };
 </script>
 <template>
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 w-100">
         <div class="row">
             <div class="col-12">
                 <form>
-                    <div class="form-group">
-                        <label for="header">Subject</label>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="customMessageHeaderValue">Subject</label>
                         <input type="text" name="customMessageHeaderValue" :class="textValidationObject.customMessageValue.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="textValidationObject.customMessageHeaderValue.isValid" class="validator">
+                        <span v-if="!textValidationObject.customMessageHeaderValue.isValid" class="validator">
                             {{ textValidationObject.customMessageHeaderValue.invalidText }}
                         </span>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
+                    <div class="form-group mt-2 mb-2">
+                        <label for="customMessageValue">Message</label>
                         <textarea type="text" name="customMessageValue" :class="textValidationObject.customMessageValue.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"></textarea>
-                        <span v-if="textValidationObject.customMessageValue.isValid" class="validator">
+                        <span v-if="!textValidationObject.customMessageValue.isValid" class="validator">
                             {{ textValidationObject.customMessageValue.invalidText }}
                         </span>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="row">
-            <button @click="submitEmail" class="btn btn-light app-button">
-                Send Email
-            </button>
+        <div class="row mt-4 mb-4">
+            <div class="col-12">
+                <button @click="submitEmail" class="btn btn-light app-button">
+                    Send Email
+                </button>
+            </div>
         </div>
     </div>
 </template>

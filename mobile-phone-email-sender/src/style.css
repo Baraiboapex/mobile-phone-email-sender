@@ -34,7 +34,6 @@ body{
 
   .message-box{
       margin:1em;
-      display:none;
       flex-direction: column;
       justify-content: space-between;
       align-items:center;

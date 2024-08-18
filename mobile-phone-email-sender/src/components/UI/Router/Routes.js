@@ -4,6 +4,8 @@ import CustomTemplate from "../../Pages/Templates/CustomTemplate.vue";
 import NoClassTemplate from "../../Pages/Templates/NoClassTemplate.vue";
 import SelectTemplate from "../../Pages/SelectTemplate.vue";
 import SendTypeTemplate from "../../Pages/SendTypeTemplate.vue";
+import Login from "../../Pages/Login.vue";
+import AuthCodeForm from "../../Pages/AuthCodeForm.vue";
 
 import { defineStore } from "pinia";
 
@@ -13,7 +15,9 @@ export const PageNames = {
     CUSTOM_TEMPLATE:"CustomTemplate",
     NO_CLASS_TEMPLATE_NAME:"NoClassTemplate",
     SEND_TYPE_TEMPLATE_NAME:"SendTypeTemplate",
-    SELECT_TEMPLATE_NAME:"SelectTemplate"
+    SELECT_TEMPLATE_NAME:"SelectTemplate",
+    AUTH_CODE_PAGE_NAME:"AuthCodeForm",
+    LOGIN_PAGE_NAME:"Login"
 };
 
 export const Routes = {
@@ -22,13 +26,15 @@ export const Routes = {
     CustomTemplate,
     NoClassTemplate,
     SelectTemplate,
-    SendTypeTemplate
+    SendTypeTemplate,
+    Login,
+    AuthCodeForm
 };
 
 export const CurrentPageStore = defineStore("CurrentPage", {
     state:()=>{
         return {
-            currentPage:Routes[PageNames.SEND_TYPE_TEMPLATE_NAME],
+            currentPage:Routes[PageNames.LOGIN_PAGE_NAME],
             visitedPages:{}
         }
     },
@@ -61,23 +67,11 @@ export const CurrentPageStore = defineStore("CurrentPage", {
                 this.visitedPages = {...this.visitedPages, ...newObject};
             }
         },
-        goForwardOnePage(currentPage){
-            const pageKeys = Object.keys(Routes);
-            pageKeys.forEach((page)=>{
-                if(page === currentPage){
-                    let pageAfterCurrentPage = pageKeys[pageKeys.indexOf(currentPage) + 1];
-                    this.currentPage = Routes[pageAfterCurrentPage];
-                }
-            });
+        updatePageWithoutNav(pageName){
+            this.currentPage = Routes[pageName];
         },
-        goBackOnePage(currentPage){
-            const pageKeys = Object.keys(Routes);
-            pageKeys.forEach((page)=>{
-                if(page === currentPage){
-                    let pageBeforeCurrentPage = pageKeys[pageKeys.indexOf(currentPage) - 1];
-                    this.currentPage = Routes[pageBeforeCurrentPage];
-                }
-            });
+        resetVisitedPagesList(){
+            this.visitedPages={}
         }
     },
     getters:{

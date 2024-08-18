@@ -42,9 +42,12 @@ export async function makeSecureApiCall({
     callBody,
     headers,
     method,
-    otherConfig
+    otherConfig,
+    secretObjectKey
 }){
     try{
+
+        console.log("ITEMS being sent ==>",JSON.parse(callBody));
 
         const getSecuritySolution = await getCurrentSolution({
             proxyUrl:CURRENT_PROXY_URL
@@ -74,8 +77,6 @@ export async function makeSecureApiCall({
             customConfigObject = { ...config, otherConfig};
         }
         
-        console.log(securitySolutionSecrets.$sec.u);
-
         const basicApiCall = await apiObject[method]((otherConfig !== null ? customConfigObject : config));
 
         return basicApiCall;

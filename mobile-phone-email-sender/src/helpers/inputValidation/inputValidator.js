@@ -9,29 +9,57 @@ export const DEFAULT_TEXT_VALIDATION_OBJECT_VALUE = {
 };
 
 export const textRulesNames = {
-    REQUIRED_RULE:"required"
-}
+    REQUIRED_RULE:"required",
+    VALID_DAY_RULE:"isValidDay",
+    VALID_MONTH_RULE:"isValidMonth",
+    VALID_YEAR_RULE:"isValidYear",
+    VALID_TIME_RULE:"isValidTime",
+    VALID_EMAIL_RULE:"isValidEmail",
+    VALID_AUTH_CODE:"isValidAuthCode"
+};
 
 export const textValidationRules = {
-    required:(val) => val !== null && val !== "" && val.length > 0 && val !== undefined
-}
+    required:(val) => val !== null && val !== "" && val.length > 0 && val !== undefined,
+    isValidDay:(val) => /[0-9][0-9]/.test(val),
+    isValidMonth:(val) => /[0-9][0-9]/.test(val),
+    isValidYear:(val) => /[0-9][0-9][0-9][0-9]/.test(val),
+    isValidTime:(val)=>/([1]?[0-9]):([0-9][0-9])\s(am|pm)/.test(val),
+    isValidEmail:(val)=> /(.*)(@)(.*)/g.test(val),
+    isValidAuthCode:(val)=>/[0-9][0-9][0-9][0-9][0-9][0-9]/.test(val)
+};
 
-export function validateTextInput({
-    rule,
-    textValue
-}){
-    let ruleChecksOut = textValidationRules[rule](textValue);
-   if(ruleChecksOut){
-        return {
-            isValid:true,
-            classValue:TEXT_FIELD_VALID_CLASS
-        };
-   }else{
-        return {
-            isValid:false,
-            classValue:TEXT_FIELD_INVALID_CLASS
-        };
-   }
+export function validateTextInput({ rules, textValue }) {
+  const rulesArrayLength = rules.length;
+
+    console.log(textValue);
+
+  let validatedTotal = 0;
+
+  rules.forEach((rule) => {
+    const ruleIsValid = textValidationRules[rule](textValue);
+
+    console.log(ruleIsValid);
+
+    if (ruleIsValid) {
+      validatedTotal++;
+    }
+  });
+
+  let rulesCheckOut = validatedTotal >= rulesArrayLength;
+
+  console.log(rulesCheckOut);
+
+  if (rulesCheckOut) {
+    return {
+      isValid: true,
+      classValue: TEXT_FIELD_VALID_CLASS,
+    };
+  } else {
+    return {
+      isValid: false,
+      classValue: TEXT_FIELD_INVALID_CLASS,
+    };
+  }
 }
 
 export const validateAllTextFields = (list)=>{

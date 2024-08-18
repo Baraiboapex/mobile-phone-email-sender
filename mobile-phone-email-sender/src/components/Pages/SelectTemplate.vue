@@ -22,7 +22,7 @@
 
 </script>
 <template>
-    <div class="container">
+    <div class="container w-100">
         <div class="row mt-2 mb-2">
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center align-items-center">

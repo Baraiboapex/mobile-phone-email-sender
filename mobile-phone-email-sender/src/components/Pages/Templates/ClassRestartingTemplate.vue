@@ -10,7 +10,7 @@
         renderTextFieldValidation,
         textRulesNames,
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../../Infra/inputValidator.js";
+    } from "../../../helpers/inputValidation/inputValidator";
 
    const {
         setTemplateParams,
@@ -30,7 +30,9 @@
         ()=>({
             fieldName:"subject",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE
+                ],
                 textValue:formData.subject,
                 invalidText:"Please input a subject"
             }),
@@ -39,7 +41,10 @@
         ()=>({
             fieldName:"day",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE,
+                    textRulesNames.VALID_DAY_RULE
+                ],
                 textValue:formData.day,
                 invalidText:"Please input a day in DD format"
             }),
@@ -48,7 +53,10 @@
         ()=>({
             fieldName:"month",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE,
+                    textRulesNames.VALID_MONTH_RULE
+                ],
                 textValue:formData.month,
                 invalidText:"Please input a month in MM format"
             }),
@@ -57,7 +65,10 @@
         ()=>({
             fieldName:"year",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE,
+                    textRulesNames.VALID_YEAR_RULE
+                ],
                 textValue:formData.year,
                 invalidText:"Please input a yeat in YYYY format"
             }),
@@ -66,7 +77,10 @@
         ()=>({
             fieldName:"time",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE,
+                    textRulesNames.VALID_TIME_RULE
+                ],
                 textValue:formData.time,
                 invalidText:"Please input a time in HH:MM format"
             }),
@@ -115,7 +129,7 @@
     };
 </script>
 <template>
-   <div class="container-fluid p-0">
+   <div class="container-fluid p-0 w-100">
         <div class="row">
             <div class="col-12">
                 <form>

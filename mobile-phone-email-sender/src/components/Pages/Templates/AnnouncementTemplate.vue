@@ -6,7 +6,7 @@
         renderTextFieldValidation,
         textRulesNames,
         DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../../Infra/inputValidator.js";
+    } from "../../../helpers/inputValidation/inputValidator";
 
     const {
         setTemplateParams,
@@ -31,7 +31,9 @@
         ()=>({
             fieldName:"subject",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE
+                ],
                 textValue:formData.subject,
                 invalidText:"Please input a subject"
             }),
@@ -40,7 +42,9 @@
         ()=>({
             fieldName:"announcement",
             validator:()=>validateTextInput({
-                rule:textRulesNames.REQUIRED_RULE,
+                rules:[
+                    textRulesNames.REQUIRED_RULE
+                ],
                 textValue:formData.announcement,
                 invalidText:"Please input an announcement"
             }),
@@ -68,7 +72,7 @@
     };
 </script>
 <template>
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 w-100">
         <div class="row">
             <div class="col-12">
                 <form>
