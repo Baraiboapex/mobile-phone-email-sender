@@ -51,7 +51,7 @@
                 </svg>
                 </template>
                 <template #submissionFailureIconImage="data">
-                    <svg v-if="data.submissionSuccessful"
+                    <svg v-if="!data.submissionSuccessful"
                         xmlns="http://www.w3.org/2000/svg" 
                         width="100" 
                         height="100" 
@@ -85,7 +85,7 @@
     import LoadingSign from "../UI/Reusable/LoadingSign.vue";
     import SubmissionMessage from "../UI/Reusable/SubmissionMessage.vue";
 
-    const LOGIN_DATA_BEING_SUBMITTED = "Login Data";
+    const LOGIN_DATA_BEING_SUBMITTED = "Login";
 
     const store = CurrentPageStore();
 
@@ -104,7 +104,7 @@
     const showLoginForm = ref(true);
     const nameOfDataBeingSubmitted = ref("");
     
-    const showSubmissionMessage = computed(()=>!showLoadingSign);
+    const showSubmissionMessage = computed(()=>!showLoadingSign.value);
 
     const textFieldValidationList = [
         ()=>({
@@ -137,26 +137,33 @@
         api,
         dataToSend
     }) => {
-        return new Promise(async (resolve)=>{
-            await makeSecureApiCall({
-                apiObject:api,
-                callBody:JSON.stringify(dataToSend),
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                method:"post",
-                otherConfig:{
-                    redirect: "follow",
-                    mode:"no-cors"
-                },
-                secretObjectKey:"u2"
-            });
+        return new Promise(async (resolve, reject)=>{
+            try{
+                await makeSecureApiCall({
+                    apiObject:api,
+                    callBody:JSON.stringify(dataToSend),
+                    headers:{
+                        "Content-Type": "application/json",
+                    },
+                    method:"post",
+                    otherConfig:{
+                        redirect: "follow",
+                        mode:"no-cors"
+                    },
+                    secretObjectKey:"u2"
+                });
 
-            submissionWasSuccessful.value = true;
-            showLoginForm.value = false;
-            showLoadingSign.value = false;
+                submissionWasSuccessful.value = true;
+                showLoginForm.value = false;
+                showLoadingSign.value = false;
 
-            resolve();
+                resolve();
+            }catch(err){
+                submissionWasSuccessful.value = false;
+                showLoginForm.value = false;
+                showLoadingSign.value = false;
+                reject();
+            }
         }) 
     };
 
@@ -176,6 +183,7 @@
         showLoginForm.value = true;
         submissionWasSuccessful.value = false;
         showLoadingSign.value = false;
+        showSubmissionMessage.value = false;
     }
 
     const loginToApp = async (e)=>{

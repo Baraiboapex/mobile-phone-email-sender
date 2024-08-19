@@ -11,8 +11,17 @@ async function getCurrentSolution({proxyUrl}){
         }
     };
     return new Promise(async(resolve, reject)=>{
-        const results = await fetch(proxyUrl, config);
-        results.ok ? resolve(results.json()) : reject(null);
+        try{
+            const results = await fetch(proxyUrl, config);
+            if(results.ok){
+                resolve(results.json());
+            }else{
+                throw new Error("Could not make request");
+            }
+        }catch(err){
+            reject("Could not make request");
+            throw new Error("Could not make request");
+        }
     });
 }
 
@@ -82,6 +91,6 @@ export async function makeSecureApiCall({
         return basicApiCall;
         
     }catch(err){
-        console.log(err);
+        throw new Error("Could not make request");
     }
 }

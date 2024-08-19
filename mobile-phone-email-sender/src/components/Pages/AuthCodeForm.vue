@@ -48,7 +48,7 @@
                 </svg>
                 </template>
                 <template #submissionFailureIconImage="data">
-                    <svg v-if="data.submissionSuccessful"
+                    <svg v-if="!data.submissionSuccessful"
                         xmlns="http://www.w3.org/2000/svg" 
                         width="100" 
                         height="100" 
@@ -101,7 +101,7 @@ const showAuthCodeForm = ref(true);
 const submissionWasSuccessful = ref(false);
 const nameOfDataBeingSubmitted = ref("");
 
-const showSubmissionMessage = computed(()=>!showLoadingSign);
+const showSubmissionMessage = computed(()=>!showLoadingSign.value);
 
 const textFieldValidationList = [
     ()=>({
@@ -121,26 +121,34 @@ const sendData = async ({
     api,
     dataToSend
 }) => {
-        return new Promise(async (resolve)=>{
-            await makeSecureApiCall({
-                apiObject:api,
-                callBody:JSON.stringify(dataToSend),
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                method:"post",
-                otherConfig:{
-                    redirect: "follow",
-                    mode:"no-cors"
-                },
-                secretObjectKey:"u2"
-            });
+    
+        return new Promise(async (resolve, reject)=>{
+            try{
+                await makeSecureApiCall({
+                    apiObject:api,
+                    callBody:JSON.stringify(dataToSend),
+                    headers:{
+                        "Content-Type": "application/json",
+                    },
+                    method:"post",
+                    otherConfig:{
+                        redirect: "follow",
+                        mode:"no-cors"
+                    },
+                    secretObjectKey:"u2"
+                });
 
-            submissionWasSuccessful.value = true;
-            showLoginForm.value = false;
-            showLoadingSign.value = false;
+                submissionWasSuccessful.value = true;
+                showAuthCodeForm.value = false;
+                showLoadingSign.value = false;
 
-            resolve();
+                resolve();
+            }catch(error){
+                submissionWasSuccessful.value = false;
+                showAuthCodeForm.value = false;
+                showLoadingSign.value = false;
+                reject();
+            }
         });
     };
 

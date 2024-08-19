@@ -1,5 +1,5 @@
 <template>
-    <section v-if="showSubmissionMessage" class="message message-box" id="submissionMessage">
+    <section v-if="showSubmissionMessage" class="message message-box w-100" id="submissionMessage">
         <h3 id="submissionMessageText">{{ submissionMessageText }}</h3>
         <h1 id="submissionIconImage">
             <slot name="submissionSuccessIconImage" :submissionSuccessful="submissionWasSuccessful"></slot>
@@ -13,18 +13,19 @@
 <script setup>
     import { computed } from "vue";
 
-    defineProps({
+    const props = defineProps({
         submissionMessageText:String,
         nameOfDataBeingSubmitted:String,
+        submissionButtonText:String,
         showSubmissionMessage:Boolean,
         submissionWasSuccessful:Boolean
     });
 
     const submissionMessageText = computed(()=>{
-        return submissionWasSuccessful ? 
-            `Data for ${nameOfDataBeingSubmitted} was successfully submitted` 
+        return props.submissionWasSuccessful ? 
+            `Data for ${props.nameOfDataBeingSubmitted} was successfully submitted` 
             : 
-            `Could not submit data for ${nameOfDataBeingSubmitted}`
+            `Could not submit data for ${props.nameOfDataBeingSubmitted}`
     });
 
     defineEmits([
