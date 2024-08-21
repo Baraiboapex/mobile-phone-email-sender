@@ -124,6 +124,7 @@ const sendData = async ({
     
         return new Promise(async (resolve, reject)=>{
             try{
+                console.log("JOJ",dataToSend);
                 await makeSecureApiCall({
                     apiObject:api,
                     callBody:JSON.stringify(dataToSend),
@@ -189,14 +190,14 @@ const sendData = async ({
             await sendData({
                 api,
                 dataToSend:{
-                    username:formData.username,
-                    password:formData.password
+                    authCode:formData.twoFAAuthenticationCode,
+                    applicationName:"Mobile Emailer",
+                    loginMode:"UserAuthCodeValidate"
                 }
             });
 
             store.updatePage(PageNames.SEND_TYPE_TEMPLATE_NAME);
             authStore.setIsLoggedInToTrue();
-            console.log(authStore.getIsLoggedIn);
         }
     }
 

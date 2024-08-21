@@ -39,13 +39,20 @@ export const CurrentPageStore = defineStore("CurrentPage", {
         }
     },
     actions:{
+        updateSessionStorage(currentRouteObject){
+            if(sessionStorage.getItem("currentRouter")){
+                sessionStorage.removeItem("currentRouter");
+                sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+            }else{
+                sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+            }
+        },
         updatePage(pageName){
             this.currentPage = Routes[pageName];
 
             let hasVisitedPage = this.visitedPages[pageName];
             
             if(hasVisitedPage){
-                //delete this.visitedPages[pageName]
                 const pages = Object.keys(this.visitedPages);
                 const indexOfSelectedPage = pages.indexOf(pageName);
 
@@ -59,12 +66,26 @@ export const CurrentPageStore = defineStore("CurrentPage", {
 
                 this.visitedPages = newObject;
                 
+                const updateObject = {
+                    currentPage:this.currentPage,
+                    visitedPages:this.visitedPages
+                };
+
+                this.updateSessionStorage(updateObject);
+
             }else{
                 const newObject = {};
                 
                 newObject[pageName] = pageName;
 
                 this.visitedPages = {...this.visitedPages, ...newObject};
+
+                const updateObject = {
+                    currentPage:this.currentPage,
+                    visitedPages:this.visitedPages
+                };
+
+                this.updateSessionStorage(updateObject);
             }
         },
         updatePageWithoutNav(pageName){
@@ -72,9 +93,27 @@ export const CurrentPageStore = defineStore("CurrentPage", {
         },
         resetVisitedPagesList(){
             this.visitedPages={}
-        }
+        },
+        setRouterStateFromLocalStorage(){
+            const currentStateFromSessionStorage =  JSON.parse(sessionStorage.getItem("currentRouter"));
+
+            const updateObject = {
+                currentPage:currentStateFromSessionStorage.currentPage,
+                visitedPages:currentStateFromSessionStorage.visitedPages
+            };
+
+            this.updateSessionStorage(updateObject);
+        },
+        initializeRouteObjectInSessionStorage(){
+            const updateObject = {
+                currentPage:this.currentPage,
+                visitedPages:this.visitedPages
+            };
+            this.updateSessionStorage(updateObject);
+        },
     },
     getters:{
-        getCurrentPage:(state)=>state.currentPage
+        getCurrentPage:(state)=>state.currentPage,
+        getCurrentRouterState:(state)=>state
     }
 });

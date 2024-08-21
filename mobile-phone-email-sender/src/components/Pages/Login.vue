@@ -4,10 +4,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="field-group mt-2 mb-2">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" :class="textValidationObject.username.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="!textValidationObject.username.isValid" class="validator">
-                            {{ textValidationObject.username.invalidText }}
+                        <label for="userName">Username</label>
+                        <input type="text" name="userName" :class="textValidationObject.userName.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="!textValidationObject.userName.isValid" class="validator">
+                            {{ textValidationObject.userName.invalidText }}
                         </span>
                     </div>
                     <div class="field-group mt-2 mb-2">
@@ -71,9 +71,8 @@
 
     import {reactive, computed  ,ref} from "vue";
     import {CurrentPageStore, PageNames} from "../UI/Router/Routes.js";
-    import { makeSecureApiCall } from "../../Infra/httpSecurityBinder.js";
-    import api from "../../Infra/apiCompnent.js";
-
+    import { AuthStore } from "../../store/auth.js";
+    
     import {
         validateTextInput,
         validateAllTextFields,
@@ -88,14 +87,15 @@
     const LOGIN_DATA_BEING_SUBMITTED = "Login";
 
     const store = CurrentPageStore();
+    const authStore = AuthStore();
 
     const formData = reactive({
-        username:"",
+        userName:"",
         password:""
     });
     
     const textValidationObject = reactive({
-        username: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
+        userName: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE,
         password: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
     });
     
@@ -108,14 +108,14 @@
 
     const textFieldValidationList = [
         ()=>({
-            fieldName:"username",
+            fieldName:"userName",
             validator:()=>validateTextInput({
                 rules:[
                     textRulesNames.REQUIRED_RULE
                 ],
-                textValue:formData.username
+                textValue:formData.userName
             }),
-            invalidText:"Please input your username"
+            invalidText:"Please input your userName"
         }),
         ()=>({
             fieldName:"password",
@@ -134,24 +134,11 @@
     };
     
     const sendData = async ({
-        api,
         dataToSend
     }) => {
         return new Promise(async (resolve, reject)=>{
             try{
-                await makeSecureApiCall({
-                    apiObject:api,
-                    callBody:JSON.stringify(dataToSend),
-                    headers:{
-                        "Content-Type": "application/json",
-                    },
-                    method:"post",
-                    otherConfig:{
-                        redirect: "follow",
-                        mode:"no-cors"
-                    },
-                    secretObjectKey:"u2"
-                });
+                await authStore.login(dataToSend);
 
                 submissionWasSuccessful.value = true;
                 showLoginForm.value = false;
@@ -205,10 +192,11 @@
 
             //await sendDataFake();
             await sendData({
-                api,
                 dataToSend:{
-                    username:formData.username,
-                    password:formData.password
+                    userName:formData.userName,
+                    password:formData.password,
+                    applicationName:"Mobile Emailer",
+                    loginMode:"UserLogin"
                 }
             });
 

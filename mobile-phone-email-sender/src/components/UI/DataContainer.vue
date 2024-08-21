@@ -26,7 +26,7 @@
     </div>
 </template>
 <script setup>
-    import {ref, reactive, computed, provide} from "vue";
+    import {ref, reactive, computed, provide, onMounted, markRaw} from "vue";
     import {makeSecureApiCall} from "../../Infra/httpSecurityBinder";
     import api from "../../Infra/apiCompnent";
 
@@ -52,7 +52,41 @@
         }
     });
 
-    const setTemplateParams = (params)=>{
+    onMounted(()=>{
+        if(!sessionStorage.getItem("currentData")){
+            initializeDataObjectInSessionStorage();
+        }else{
+            setDataStateFromLocalStorage();
+        }
+    });
+
+    const setDataStateFromLocalStorage = () => {
+        const currentStateFromSessionStorage =  JSON.parse(sessionStorage.getItem("currentData"));
+
+        const updateObject = {
+            ...currentStateFromSessionStorage
+        };
+
+        updateSessionStorage(updateObject);
+    }
+
+    const updateSessionStorage = (currentRouteObject) => {
+        if(sessionStorage.getItem("currentRouter")){
+            sessionStorage.removeItem("currentRouter");
+            sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+        }else{
+            sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+        }
+    };
+
+    const initializeDataObjectInSessionStorage = () => {
+        const updateObject = {
+            ...markRaw(dataToSend)
+        };
+        sessionStorage.setItem("currentData", JSON.stringify(updateObject));
+    }
+
+    const setTemplateParams = (params)=>{    
         dataToSend.templateParams = params;
     }
 
@@ -61,7 +95,6 @@
     }
 
     const setSelectedTemplate = (template) => {
-        console.log(template);
         dataToSend.selectedTemplate = template;
     }
 
@@ -77,7 +110,6 @@
     }
 
     const sendData = async () => {
-        console.log(dataToSend);
         try{
             pageIsLoading.value = true;
             await makeSecureApiCall({
@@ -96,6 +128,8 @@
             pageIsLoading.value = false;
             dataSentSuccessfully.value = true;
             popToast();
+
+            sessionStorage.removeItem("senderData");
         }catch(err){
             pageIsLoading.value = false;
             dataSentSuccessfully.value = false;

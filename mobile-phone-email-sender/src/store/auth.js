@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {makeSecureApiCall} from "../Infra/httpSecurityBinder";
+import api from "../Infra/apiCompnent";
 
 export const AuthStore = defineStore("Auth", {
     state:()=>{
@@ -9,33 +10,39 @@ export const AuthStore = defineStore("Auth", {
         }
     },
     actions:{
-        login({
-            username,
-            password
+        async login({
+            userName,
+            password,
+            applicationName,
+            loginMode
         }){
-            return Promise(async (resolve,reject)=>{
+            return new Promise(async (resolve,reject)=>{
                 const callBodyToSend = {
-                    username,
-                    password
-                }
+                    userName,
+                    password,
+                    applicationName,
+                    loginMode
+                };
+                
                 const loginReady = await makeSecureApiCall({
                     apiObject:api,
-                    callBody:JSON.stringify(callBodyToSend),
+                    callBody:callBodyToSend,
                     headers:{
                         "Content-Type": "application/json",
                     },
                     method:"post",
                     otherConfig:{
-                        redirect: "follow",
                         mode:"no-cors"
                     },
-                    secretObjectKey:"lu"
+                    secretObjectKey:"u2"
                 });
                 
+                console.log(loginReady);
+
                 state.isLoggedIn = true;
 
                 resolve(loginReady);
-            })
+            });
         },
         logout(){
             this.isLoggedIn = false;

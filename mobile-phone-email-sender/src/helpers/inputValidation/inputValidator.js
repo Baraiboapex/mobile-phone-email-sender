@@ -31,14 +31,10 @@ export const textValidationRules = {
 export function validateTextInput({ rules, textValue }) {
   const rulesArrayLength = rules.length;
 
-    console.log(textValue);
-
   let validatedTotal = 0;
 
   rules.forEach((rule) => {
     const ruleIsValid = textValidationRules[rule](textValue);
-
-    console.log(ruleIsValid);
 
     if (ruleIsValid) {
       validatedTotal++;
@@ -46,8 +42,6 @@ export function validateTextInput({ rules, textValue }) {
   });
 
   let rulesCheckOut = validatedTotal >= rulesArrayLength;
-
-  console.log(rulesCheckOut);
 
   if (rulesCheckOut) {
     return {

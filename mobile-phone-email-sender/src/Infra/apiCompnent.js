@@ -6,7 +6,7 @@ async function setupFetch({
     headers
 }){
     return new Promise(async (resolve, reject)=>{
-        console.log({
+        console.log("CONFIG",{
             url,
             body,
             otherConfig,
@@ -23,7 +23,7 @@ async function setupFetch({
                 }
             );
 
-            console.log({
+            console.log("CONFIG-2",url,{
                 method,
                 body,
                 headers,
@@ -40,7 +40,7 @@ async function setupFetch({
 
             resolve(getFinalData);
         }catch(err){
-            console.error("Could not get data from server");
+            console.error("ERROR: ",err);
             reject(err);
         }
     }) 
@@ -48,8 +48,10 @@ async function setupFetch({
 
 async function parseResponseData({resp}){
     return new Promise(async (res, rej)=>{
+        console.log(resp);
         if(resp.ok){
             const json = await resp.json();
+            console.log("DATA",json);
             res(json);
         }else{
             rej("Could not get data from server");
