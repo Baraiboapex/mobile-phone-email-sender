@@ -35,7 +35,7 @@ export const CurrentPageStore = defineStore("CurrentPage", {
     state:()=>{
         return {
             currentPage:sessionStorage.getItem("currentRouter") ? JSON.parse(sessionStorage.getItem("currentRouter")).currentPage : Routes[PageNames.LOGIN_PAGE_NAME] ,
-            visitedPages:{}
+            visitedPages:sessionStorage.getItem("currentRouter") ? JSON.parse(sessionStorage.getItem("currentRouter")).visitedPages : {}
         }
     },
     actions:{
@@ -47,41 +47,44 @@ export const CurrentPageStore = defineStore("CurrentPage", {
 
             let hasVisitedPage = this.visitedPages[pageName];
             
-            if(hasVisitedPage){
-                const pages = Object.keys(this.visitedPages);
-                const indexOfSelectedPage = pages.indexOf(pageName);
-
-                const filteredPages = pages.filter(page => pages.indexOf(page) !== indexOfSelectedPage + 1);
-
-                const newObject = {};
-
-                filteredPages.forEach(page=>{
-                    newObject[page] = page;
-                });
-
-                this.visitedPages = newObject;
-                
-                const updateObject = {
-                    currentPage:this.currentPage,
-                    visitedPages:this.visitedPages
-                };
-
-                this.updateSessionStorage(updateObject);
-
-            }else{
-                const newObject = {};
-                
-                newObject[pageName] = pageName;
-
-                this.visitedPages = {...this.visitedPages, ...newObject};
-
-                const updateObject = {
-                    currentPage:this.currentPage,
-                    visitedPages:this.visitedPages
-                };
-
-                this.updateSessionStorage(updateObject);
+            if(pageName !== "Login" && pageName !== "AuthCodeForm"){
+                if(hasVisitedPage){
+                    const pages = Object.keys(this.visitedPages);
+                    const indexOfSelectedPage = pages.indexOf(pageName);
+    
+                    const filteredPages = pages.filter(page => pages.indexOf(page) !== indexOfSelectedPage + 1);
+    
+                    const newObject = {};
+    
+                    filteredPages.forEach(page=>{
+                        newObject[page] = page;
+                    });
+    
+                    this.visitedPages = newObject;
+                    
+                    const updateObject = {
+                        currentPage:this.currentPage,
+                        visitedPages:this.visitedPages
+                    };
+    
+                    this.updateSessionStorage(updateObject);
+    
+                }else{
+                    const newObject = {};
+                    
+                    newObject[pageName] = pageName;
+    
+                    this.visitedPages = {...this.visitedPages, ...newObject};
+    
+                    const updateObject = {
+                        currentPage:this.currentPage,
+                        visitedPages:this.visitedPages
+                    };
+    
+                    this.updateSessionStorage(updateObject);
+                }
             }
+            
         },
         updatePageWithoutNav(pageName){
             this.currentPage = Routes[pageName];
@@ -98,7 +101,6 @@ export const CurrentPageStore = defineStore("CurrentPage", {
             };
 
             this.updateSessionStorage(updateObject);
-
         },
         initializeRouteObjectInSessionStorage(){
             const updateObject = {
@@ -106,10 +108,11 @@ export const CurrentPageStore = defineStore("CurrentPage", {
                 visitedPages:this.visitedPages
             };
             this.updateSessionStorage(updateObject);
-        },
+        }
     },
     getters:{
         getCurrentPage:(state)=>state.currentPage,
-        getCurrentRouterState:(state)=>state
+        getCurrentRouterState:(state)=>state,
+        getCurrentVisitedPages:(state)=>state.visitedPages
     }
 });

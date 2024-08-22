@@ -1,8 +1,6 @@
 const CURRENT_PROXY_URL = "http://localhost:3002/";
 const CURRENT_SECURITY_SERVER_URL = "http://localhost:3000/solution";
 
-import { markRaw } from "vue";
-
 async function getCurrentSolution({proxyUrl}){
     const config = {
         method:"GET",

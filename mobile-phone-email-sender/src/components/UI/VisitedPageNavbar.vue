@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex">
-        <div v-if="useAuthStore.getIsLoggedIn" class="row pt-4 pb-4 mb-4">
+        <div v-if="canShowNavbar" class="row pt-4 pb-4 mb-4">
             <div class="col-12">
                 <div class="d-flex flex-row justify-content-between">
                     <div class="d-flex flex-row">
@@ -28,7 +28,7 @@
     </div>
 </template>
 <script setup>
-    import {reactive, watch, computed} from "vue";
+    import {reactive, watch, computed, onMounted} from "vue";
     import {
         addSpaceBeforeCapitalLetters
     } from "../../helpers/UILegibilityHelpers/wordFormatHelpers";
@@ -52,6 +52,10 @@
         return _.isEmpty(useCurrentPageStore.visitedPages) === false ? useCurrentPageStore.visitedPages : null;
     });
 
+    const canShowNavbar = computed(()=>{
+        return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized;
+    });
+
     watch(
         getVisitedPages,
         (newValue, oldValue)=>{
@@ -60,13 +64,15 @@
     );
 
     const updatePagesList = (val) => {
-        const pages = Object.keys(val);
-        visitedPages.pages = pages.map((page)=>{
-            return {
-                pageName:addSpaceBeforeCapitalLetters(page),
-                pageTemplateString:page
-            };
-        });
+        if(val !== null){
+            const pages = Object.keys(val);
+            visitedPages.pages = pages.map((page)=>{
+                return {
+                    pageName:addSpaceBeforeCapitalLetters(page),
+                    pageTemplateString:page
+                };
+            });
+        }
     };
 
     const goToPage = (e) => {
@@ -77,7 +83,7 @@
     const logout = ()=>{
         useAuthStore.logout();
         useCurrentPageStore.updatePageWithoutNav(PageNames.LOGIN_PAGE_NAME);
-        //useCurrentPageStore.resetVisitedPagesList();
-    }
+        useCurrentPageStore.resetVisitedPagesList();
+    };
 
 </script>

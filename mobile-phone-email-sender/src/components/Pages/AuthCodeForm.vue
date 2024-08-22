@@ -203,7 +203,6 @@ const sendData = async ({
                 showAuthCodeForm.value = false;
                 showLoadingSign.value = true;
 
-                //await sendDataFake();
                 await sendData({
                     api,
                     dataToSend:{
@@ -215,6 +214,7 @@ const sendData = async ({
 
                 store.updatePage(PageNames.SEND_TYPE_TEMPLATE_NAME);
                 authStore.setIsLoggedInToTrue();
+                authStore.setUserAuthorizationToTrue();
             }
         }catch(err){
             console.log("ERROR :", err)

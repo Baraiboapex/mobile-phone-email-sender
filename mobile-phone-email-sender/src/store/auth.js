@@ -5,11 +5,14 @@ import api from "../Infra/apiCompnent";
 export const AuthStore = defineStore("Auth", {
     state:()=>{
         return {
-            user:{},
-            isLoggedIn:false
+            isLoggedIn:sessionStorage.getItem("authStatus") ? JSON.parse(sessionStorage.getItem("authStatus")).isLoggedIn : false,
+            userIsAuthorized:sessionStorage.getItem("authStatus") ? JSON.parse(sessionStorage.getItem("authStatus")).userIsAuthorized : false
         }
     },
     actions:{
+        updateSessionStorage(currentRouteObject){
+            sessionStorage.setItem("authStatus", JSON.stringify(currentRouteObject));
+        },
         async login({
             userName,
             password,
@@ -58,26 +61,38 @@ export const AuthStore = defineStore("Auth", {
 
                     if(validLogin){
                         this.isLoggedIn = validLogin;
+                        this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:this.userIsAuthorized});
                         resolve(validLogin);
                     }else{
                         this.isLoggedIn = false;
+                        this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:this.userIsAuthorized});
                         reject();
                     }
                 }catch(err){
+                    this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:false});
                     throw new Error("Could not login:", err);
                 }
             });
         },
         logout(){
             this.isLoggedIn = false;
+            this.userIsAuthorized = false;
             this.user = {};
+            sessionStorage.removeItem("authStatus");
+            sessionStorage.removeItem("currentRouter");
+            sessionStorage.removeItem("currentData");
         },
         setIsLoggedInToTrue(){
             this.isLoggedIn = true;
+        },
+        setUserAuthorizationToTrue(){
+            this.userIsAuthorized = true;
+            this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:true})
         }
     },
     getters:{
         getUser:(state)=>state.user,
-        getIsLoggedIn:(state)=>state.isLoggedIn
+        getIsLoggedIn:(state)=>state.isLoggedIn,
+        getUserIsAuthroized:(state)=>state.userIsAuthorized
     }
 });

@@ -1,3 +1,34 @@
+<template>
+    <div class="container-fluid p-0 w-100">
+        <div class="row">
+            <div class="col-12">
+                <form>
+                    <div class="field-group mt-2 mb-2">
+                        <label for="subject">Subject</label>
+                        <input type="text" name="subject" :class="textValidationObject.subject.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="!textValidationObject.subject.isValid" class="validator">
+                            {{ textValidationObject.subject.invalidText }}
+                        </span>
+                    </div>
+                    <div class="field-group mt-2 mb-2">
+                        <label for="announcement">Announcement</label>
+                        <input type="text" name="announcement" :class="textValidationObject.announcement.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
+                        <span v-if="!textValidationObject.announcement.isValid" class="validator">
+                            {{ textValidationObject.announcement.invalidText }}
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <div class="col-12">
+                <button @click="submitEmail" class="btn btn-light app-button">
+                    Send Email
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
 <script setup>
     import {reactive, computed, inject} from "vue";
     import {
@@ -71,34 +102,3 @@
         }
     };
 </script>
-<template>
-    <div class="container-fluid p-0 w-100">
-        <div class="row">
-            <div class="col-12">
-                <form>
-                    <div class="field-group mt-2 mb-2">
-                        <label for="subject">Subject</label>
-                        <input type="text" name="subject" :class="textValidationObject.subject.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="!textValidationObject.subject.isValid" class="validator">
-                            {{ textValidationObject.subject.invalidText }}
-                        </span>
-                    </div>
-                    <div class="field-group mt-2 mb-2">
-                        <label for="announcement">Announcement</label>
-                        <input type="text" name="announcement" :class="textValidationObject.announcement.classValue + ' w-100 m-1 text-input'" @change="(event) => setTemplateData(event)"/>
-                        <span v-if="!textValidationObject.announcement.isValid" class="validator">
-                            {{ textValidationObject.announcement.invalidText }}
-                        </span>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="row mt-4 mb-4">
-            <div class="col-12">
-                <button @click="submitEmail" class="btn btn-light app-button">
-                    Send Email
-                </button>
-            </div>
-        </div>
-    </div>
-</template>
