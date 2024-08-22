@@ -66,6 +66,7 @@ body{
     
     .app-btn-nav{
         font-size:0.7em;
+        height:100% !important;
         letter-spacing:0.10em;
         margin:0 0.2em 0 0.2em !important;
         border-radius: 0 !important;
@@ -76,6 +77,7 @@ body{
 
     .app-btn-nav:hover{
         font-size:0.7em;
+        height:100% !important;
         letter-spacing:0.10em;
         border-radius: 0 !important;
         color:white!important;
@@ -85,6 +87,7 @@ body{
 
     .app-btn-nav:visited{
         font-size:0.7em;
+        height:100% !important;
         letter-spacing:0.10em;
         border-radius: 0 !important;
         color:white!important;
@@ -228,7 +231,7 @@ body{
         letter-spacing:0.21em;
     }
 
-    @media screen and (max-width: 48em){
+    @media screen and (max-width: 52.1875em){
         .form{
             width: 75% !important;
         }

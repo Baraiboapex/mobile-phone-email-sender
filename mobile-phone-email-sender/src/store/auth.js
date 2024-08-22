@@ -6,7 +6,7 @@ export const AuthStore = defineStore("Auth", {
     state:()=>{
         return {
             isLoggedIn:sessionStorage.getItem("authStatus") ? JSON.parse(sessionStorage.getItem("authStatus")).isLoggedIn : false,
-            userIsAuthorized:sessionStorage.getItem("authStatus") ? JSON.parse(sessionStorage.getItem("authStatus")).userIsAuthorized : false
+            userIsAuthroized:sessionStorage.getItem("authStatus") ? JSON.parse(sessionStorage.getItem("authStatus")).userIsAuthroized : false
         }
     },
     actions:{
@@ -86,13 +86,13 @@ export const AuthStore = defineStore("Auth", {
             this.isLoggedIn = true;
         },
         setUserAuthorizationToTrue(){
-            this.userIsAuthorized = true;
+            this.userIsAuthroized = true;
             this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:true})
         }
     },
     getters:{
         getUser:(state)=>state.user,
         getIsLoggedIn:(state)=>state.isLoggedIn,
-        getUserIsAuthroized:(state)=>state.userIsAuthorized
+        getUserIsAuthroized:(state)=>state.userIsAuthroized
     }
 });

@@ -53,12 +53,16 @@
     </div>
 </template>
 <script setup>
-    import {ref, reactive, computed, provide, onMounted, markRaw} from "vue";
+    import {ref, reactive, computed, provide, onMounted, markRaw, inject} from "vue";
     import {makeSecureApiCall} from "../../Infra/httpSecurityBinder";
     import api from "../../Infra/apiCompnent";
     
     import LoadingSign from "../UI/Reusable/LoadingSign.vue";
     import SubmissionMessage from "../UI/Reusable/SubmissionMessage.vue";
+
+    const {
+        enableDisableNavbarButtons
+    } = inject("navbarControls");
 
     const dataToSend = reactive({
         usersToSendTo:[],
@@ -133,6 +137,9 @@
         submissionWasSuccessful.value = false;
         showLoadingSign.value = false;
         showSubmissionMessage.value = false;
+        enableDisableNavbarButtons({
+            buttonsDisabled:false
+        });
     }
 
     const toggleSubmissionMessage = ({
@@ -154,6 +161,10 @@
         
         try{
             showPage.value = false;
+
+            enableDisableNavbarButtons({
+                buttonsDisabled:true
+            });
 
             toggleLoadingSign({
                 showLoading:true
@@ -189,14 +200,12 @@
         }catch(err){
             console.log(err);
 
-            toggleLoadingSign({
-                showLoading:false
+            enableDisableNavbarButtons({
+                buttonsDisabled:false
             });
 
-            toggleSubmissionMessage({
-                showMessage:true,
-                submissionSuccessful:false,
-                messageText:"Email"
+            toggleLoadingSign({
+                showLoading:false
             });
         }
     }

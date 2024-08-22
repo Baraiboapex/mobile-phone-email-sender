@@ -41,7 +41,7 @@
         <div class="row mt-2 mb-2">
             <div class="col-sm-12 d-flex justify-content-center align-items-center">
                 <div class="w-100 d-flex justify-content-center align-items-center">
-                    <button id="setClassRestartingTemplate" @click="selectTemplate" class="btn btn-light app-button">Class Restart Email</button>
+                    <button id="setClassResumesTemplate" @click="selectTemplate" class="btn btn-light app-button">Class Restart Email</button>
                 </div>
             </div>
         </div>

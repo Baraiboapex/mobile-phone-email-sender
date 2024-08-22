@@ -1,17 +1,17 @@
 <template>
-    <div class="d-flex">
+    <div class="w-100">
         <div v-if="canShowNavbar" class="row pt-4 pb-4 mb-4">
             <div class="col-12">
-                <div class="d-flex flex-row justify-content-between">
-                    <div class="d-flex flex-row">
+                <div class="d-flex flex-xl-row flex-lg-row flex-md-row flex-sm-column flex-column justify-content-between">
+                    <div class="d-flex flex-xl-row flex-lg-row flex-md-row flex-sm-column flex-column">
                         <div v-for="(page, index) in visitedPages.pages">
-                            <button :name="page.pageTemplateString" @click="goToPage" class="btn btn-danger app-btn-nav">
+                            <button :name="page.pageTemplateString" @click="goToPage" :disabled="visitedPages.buttonsDisabled" class="btn btn-danger app-btn-nav">
                                 {{ page.pageName }}
                             </button>
                         </div>
                     </div>
                     <div class="d-flex flex-row">
-                        <button @click="logout" class="btn btn-danger app-btn-nav">
+                        <button @click="logout" class="btn btn-danger app-btn-nav" :disabled="visitedPages.buttonsDisabled">
                             <div class="d-flex flex-row">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
@@ -25,10 +25,14 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <slot></slot>
+        </div>
     </div>
+
 </template>
 <script setup>
-    import {reactive, watch, computed, onMounted} from "vue";
+    import {reactive, watch, computed, onMounted, provide} from "vue";
     import {
         addSpaceBeforeCapitalLetters
     } from "../../helpers/UILegibilityHelpers/wordFormatHelpers";
@@ -45,7 +49,8 @@
     const useAuthStore = AuthStore();
 
     const visitedPages = reactive({
-        pages:[]
+        pages:[],
+        buttonsDisabled:false
     });
 
     const getVisitedPages = computed(()=>{
@@ -53,7 +58,8 @@
     });
 
     const canShowNavbar = computed(()=>{
-        return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized;
+        console.log(useAuthStore.getIsLoggedIn, useAuthStore.getUserIsAuthroized);
+        return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized ? true : false;
     });
 
     watch(
@@ -85,5 +91,15 @@
         useCurrentPageStore.updatePageWithoutNav(PageNames.LOGIN_PAGE_NAME);
         useCurrentPageStore.resetVisitedPagesList();
     };
+
+    function enableDisableNavbarButtons({
+        buttonsDisabled
+    }){
+        visitedPages.buttonsDisabled = buttonsDisabled;
+    }
+
+    provide("navbarControls",{
+        enableDisableNavbarButtons
+    });
 
 </script>

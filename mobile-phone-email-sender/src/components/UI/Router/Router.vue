@@ -1,6 +1,6 @@
 <script setup>
     import { storeToRefs } from 'pinia'
-    import { onMounted } from 'vue';
+    import { onMounted, provide } from 'vue';
     import {
         CurrentPageStore
     } from "./Routes.js"
@@ -20,7 +20,7 @@
     function changeCurrentRoute(route){
         store.updatePage(route);
     }
-
+    
 </script>
 <template>
     <div class="d-flex">

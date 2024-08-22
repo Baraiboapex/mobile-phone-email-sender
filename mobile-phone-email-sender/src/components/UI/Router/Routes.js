@@ -1,5 +1,5 @@
 import AnnouncementTemplate from "../../Pages/Templates/AnnouncementTemplate.vue";
-import ClassRestartingTemplate from "../../Pages/Templates/ClassRestartingTemplate.vue";
+import ClassResumesTemplate from "../../Pages/Templates/ClassResumesTemplate.vue";
 import CustomTemplate from "../../Pages/Templates/CustomTemplate.vue";
 import NoClassTemplate from "../../Pages/Templates/NoClassTemplate.vue";
 import SelectTemplate from "../../Pages/SelectTemplate.vue";
@@ -11,7 +11,7 @@ import { defineStore } from "pinia";
 
 export const PageNames = {
     ANNOUNCEMENT_TEMPLATE_NAME:"AnnouncementTemplate",
-    CLASS_RESTARTING_TEMPLATE_NAME:"ClassRestartingTemplate",
+    CLASS_RESTARTING_TEMPLATE_NAME:"ClassResumesTemplate",
     CUSTOM_TEMPLATE:"CustomTemplate",
     NO_CLASS_TEMPLATE_NAME:"NoClassTemplate",
     SEND_TYPE_TEMPLATE_NAME:"SendTypeTemplate",
@@ -22,7 +22,7 @@ export const PageNames = {
 
 export const Routes = {
     AnnouncementTemplate,
-    ClassRestartingTemplate,
+    ClassResumesTemplate,
     CustomTemplate,
     NoClassTemplate,
     SelectTemplate,
