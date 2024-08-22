@@ -13,6 +13,7 @@
             store.initializeRouteObjectInSessionStorage();
         }else{
             store.setRouterStateFromLocalStorage();
+            changeCurrentRoute(store.getCurrentPage.__name);
         }
     });
 

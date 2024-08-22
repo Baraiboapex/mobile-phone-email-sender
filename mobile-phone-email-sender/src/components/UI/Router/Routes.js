@@ -34,18 +34,13 @@ export const Routes = {
 export const CurrentPageStore = defineStore("CurrentPage", {
     state:()=>{
         return {
-            currentPage:Routes[PageNames.LOGIN_PAGE_NAME],
+            currentPage:sessionStorage.getItem("currentRouter") ? JSON.parse(sessionStorage.getItem("currentRouter")).currentPage : Routes[PageNames.LOGIN_PAGE_NAME] ,
             visitedPages:{}
         }
     },
     actions:{
         updateSessionStorage(currentRouteObject){
-            if(sessionStorage.getItem("currentRouter")){
-                sessionStorage.removeItem("currentRouter");
-                sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
-            }else{
-                sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
-            }
+            sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
         },
         updatePage(pageName){
             this.currentPage = Routes[pageName];
@@ -103,6 +98,7 @@ export const CurrentPageStore = defineStore("CurrentPage", {
             };
 
             this.updateSessionStorage(updateObject);
+
         },
         initializeRouteObjectInSessionStorage(){
             const updateObject = {

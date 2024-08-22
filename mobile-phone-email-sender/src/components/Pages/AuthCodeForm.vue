@@ -121,10 +121,8 @@ const sendData = async ({
     api,
     dataToSend
 }) => {
-    
         return new Promise(async (resolve, reject)=>{
             try{
-                console.log("JOJ",dataToSend);
                 await makeSecureApiCall({
                     apiObject:api,
                     callBody:JSON.stringify(dataToSend),
@@ -138,10 +136,28 @@ const sendData = async ({
                     },
                     secretObjectKey:"u2"
                 });
+                
+                dataToSend.loginMode = "ValidateUserAuthCodeExists";
 
-                submissionWasSuccessful.value = true;
-                showAuthCodeForm.value = false;
-                showLoadingSign.value = false;
+                const loginValidationFieldsToSubmit = new URLSearchParams(dataToSend).toString();
+
+                const validateAuthCode = await makeSecureApiCall({
+                    urlParams:loginValidationFieldsToSubmit,
+                    apiObject:api,
+                    method:"get",
+                    noConfig:true,
+                    secretObjectKey:"u2" 
+                });
+
+                let authCodeIsValid = validateAuthCode.userIsAuthorized;
+
+                if(authCodeIsValid){
+                    submissionWasSuccessful.value = true;
+                    showAuthCodeForm.value = false;
+                    showLoadingSign.value = false;
+                }else{
+                    throw new Error("Could not authroize user");
+                }
 
                 resolve();
             }catch(error){
@@ -172,32 +188,36 @@ const sendData = async ({
     };
 
     const submitAuthCode = async () => {
-        const textInputIsValid = validateAllTextFields(textFieldValidationList);
+        try{
+            const textInputIsValid = validateAllTextFields(textFieldValidationList);
 
-        renderTextFieldValidation({
-            validFieldsList:textInputIsValid.validFieldsList,
-            invalidFieldsList:textInputIsValid.invalidFieldsList,
-            valueToValidateFromValidatorObject:textValidationObject
-        });
-
-        if(textInputIsValid.inputsAreValid){
-            nameOfDataBeingSubmitted.value = VERIFICATION_CODE_BEING_SUBMITTED;
-            submissionWasSuccessful.value = false;
-            showAuthCodeForm.value = false;
-            showLoadingSign.value = true;
-
-            //await sendDataFake();
-            await sendData({
-                api,
-                dataToSend:{
-                    authCode:formData.twoFAAuthenticationCode,
-                    applicationName:"Mobile Emailer",
-                    loginMode:"UserAuthCodeValidate"
-                }
+            renderTextFieldValidation({
+                validFieldsList:textInputIsValid.validFieldsList,
+                invalidFieldsList:textInputIsValid.invalidFieldsList,
+                valueToValidateFromValidatorObject:textValidationObject
             });
 
-            store.updatePage(PageNames.SEND_TYPE_TEMPLATE_NAME);
-            authStore.setIsLoggedInToTrue();
+            if(textInputIsValid.inputsAreValid){
+                nameOfDataBeingSubmitted.value = VERIFICATION_CODE_BEING_SUBMITTED;
+                submissionWasSuccessful.value = false;
+                showAuthCodeForm.value = false;
+                showLoadingSign.value = true;
+
+                //await sendDataFake();
+                await sendData({
+                    api,
+                    dataToSend:{
+                        authCode:formData.twoFAAuthenticationCode,
+                        userName:"matthewpbaileydesigns@gmail.com",
+                        loginMode:"UserAuthCodeValidate"
+                    }
+                });
+
+                store.updatePage(PageNames.SEND_TYPE_TEMPLATE_NAME);
+                authStore.setIsLoggedInToTrue();
+            }
+        }catch(err){
+            console.log("ERROR :", err)
         }
     }
 

@@ -17,31 +17,55 @@ export const AuthStore = defineStore("Auth", {
             loginMode
         }){
             return new Promise(async (resolve,reject)=>{
-                const callBodyToSend = {
-                    userName,
-                    password,
-                    applicationName,
-                    loginMode
-                };
-                
-                const loginReady = await makeSecureApiCall({
-                    apiObject:api,
-                    callBody:callBodyToSend,
-                    headers:{
-                        "Content-Type": "application/json",
-                    },
-                    method:"post",
-                    otherConfig:{
-                        mode:"no-cors"
-                    },
-                    secretObjectKey:"u2"
-                });
-                
-                console.log(loginReady);
+                try{
+                    const callBodyToSend = {
+                        userName,
+                        password,
+                        applicationName,
+                        loginMode
+                    };
+                    
+                    await makeSecureApiCall({
+                        apiObject:api,
+                        callBody:callBodyToSend,
+                        headers:{
+                            "Content-Type": "application/json",
+                        },
+                        method:"post",
+                        otherConfig:{
+                            mode:"no-cors",
+                            redirect: "follow",
+                        },
+                        noConfig:false,
+                        secretObjectKey:"u2"
+                    });
+                    
+                    const loginValidationFieldsToSubmit = {
+                        userName,
+                        password,
+                        loginMode: "ValidateUserExists",
+                    };
+                    
+                    const validateLogin = await makeSecureApiCall({
+                        urlParams:new URLSearchParams(loginValidationFieldsToSubmit).toString(),
+                        apiObject:api,
+                        method:"get",
+                        noConfig:true,
+                        secretObjectKey:"u2"
+                    });
+                    
+                    let validLogin = validateLogin.userIsLoggedIn;
 
-                state.isLoggedIn = true;
-
-                resolve(loginReady);
+                    if(validLogin){
+                        this.isLoggedIn = validLogin;
+                        resolve(validLogin);
+                    }else{
+                        this.isLoggedIn = false;
+                        reject();
+                    }
+                }catch(err){
+                    throw new Error("Could not login:", err);
+                }
             });
         },
         logout(){

@@ -61,7 +61,7 @@
     });
 
     const setDataStateFromLocalStorage = () => {
-        const currentStateFromSessionStorage =  JSON.parse(sessionStorage.getItem("currentData"));
+        const currentStateFromSessionStorage =  JSON.parse(dataToSend);
 
         const updateObject = {
             ...currentStateFromSessionStorage
@@ -70,12 +70,12 @@
         updateSessionStorage(updateObject);
     }
 
-    const updateSessionStorage = (currentRouteObject) => {
-        if(sessionStorage.getItem("currentRouter")){
-            sessionStorage.removeItem("currentRouter");
-            sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+    const updateSessionStorage = (currentStateObject) => {
+        if(sessionStorage.getItem("currentData")){
+            sessionStorage.removeItem("currentData");
+            sessionStorage.setItem("currentData", JSON.stringify(currentStateObject));
         }else{
-            sessionStorage.setItem("currentRouter", JSON.stringify(currentRouteObject));
+            sessionStorage.setItem("currentData", JSON.stringify(currentStateObject));
         }
     };
 
@@ -88,18 +88,22 @@
 
     const setTemplateParams = (params)=>{    
         dataToSend.templateParams = params;
+        updateSessionStorage(dataToSend);
     }
 
     const setUsersToSendTo = (users) => {
         dataToSend.usersToSendTo = users;
+        updateSessionStorage(dataToSend);
     }
 
     const setSelectedTemplate = (template) => {
         dataToSend.selectedTemplate = template;
+        updateSessionStorage(dataToSend);
     }
 
     const setMode = (mode) => {
         dataToSend.mode = mode;
+        updateSessionStorage(dataToSend);
     }
 
     const popToast = () => {
@@ -128,8 +132,6 @@
             pageIsLoading.value = false;
             dataSentSuccessfully.value = true;
             popToast();
-
-            sessionStorage.removeItem("senderData");
         }catch(err){
             pageIsLoading.value = false;
             dataSentSuccessfully.value = false;

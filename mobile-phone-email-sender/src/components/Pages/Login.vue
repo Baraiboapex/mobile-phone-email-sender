@@ -138,18 +138,19 @@
     }) => {
         return new Promise(async (resolve, reject)=>{
             try{
-                await authStore.login(dataToSend);
+                const loginData = await authStore.login(dataToSend);
 
                 submissionWasSuccessful.value = true;
                 showLoginForm.value = false;
                 showLoadingSign.value = false;
 
-                resolve();
+                resolve(loginData);
             }catch(err){
                 submissionWasSuccessful.value = false;
                 showLoginForm.value = false;
                 showLoadingSign.value = false;
-                reject();
+                reject(err);
+                throw new Error(err);
             }
         }) 
     };
@@ -174,33 +175,39 @@
     }
 
     const loginToApp = async (e)=>{
-        e.preventDefault();
-        const textInputIsValid = validateAllTextFields(textFieldValidationList);
+        try{
+            e.preventDefault();
+            const textInputIsValid = validateAllTextFields(textFieldValidationList);
 
-        renderTextFieldValidation({
-            validFieldsList:textInputIsValid.validFieldsList,
-            invalidFieldsList:textInputIsValid.invalidFieldsList,
-            valueToValidateFromValidatorObject:textValidationObject
-        });
-        
-        if(textInputIsValid.inputsAreValid){
-            
-            showLoadingSign.value = true;
-            showLoginForm.value = false;
-            submissionWasSuccessful.value = false;
-            nameOfDataBeingSubmitted.value = LOGIN_DATA_BEING_SUBMITTED;
-
-            //await sendDataFake();
-            await sendData({
-                dataToSend:{
-                    userName:formData.userName,
-                    password:formData.password,
-                    applicationName:"Mobile Emailer",
-                    loginMode:"UserLogin"
-                }
+            renderTextFieldValidation({
+                validFieldsList:textInputIsValid.validFieldsList,
+                invalidFieldsList:textInputIsValid.invalidFieldsList,
+                valueToValidateFromValidatorObject:textValidationObject
             });
+            
+            if(textInputIsValid.inputsAreValid){
+                
+                showLoadingSign.value = true;
+                showLoginForm.value = false;
+                submissionWasSuccessful.value = false;
+                nameOfDataBeingSubmitted.value = LOGIN_DATA_BEING_SUBMITTED;
 
-           store.updatePageWithoutNav(PageNames.AUTH_CODE_PAGE_NAME);
+                //await sendDataFake();
+                await sendData({
+                    dataToSend:{
+                        userName:formData.userName,
+                        password:formData.password,
+                        applicationName:"Mobile Emailer",
+                        loginMode:"UserLogin"
+                    }
+                });
+
+                if(authStore.getIsLoggedIn){
+                    store.updatePageWithoutNav(PageNames.AUTH_CODE_PAGE_NAME);
+                }
+            }
+        }catch(err){
+            console.log("Could not login :"+err);
         }
     };
 </script>

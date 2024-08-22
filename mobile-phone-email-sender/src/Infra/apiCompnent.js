@@ -3,44 +3,46 @@ async function setupFetch({
     body,
     otherConfig,
     method,
-    headers
+    headers,
+    noConfig
 }){
     return new Promise(async (resolve, reject)=>{
-        console.log("CONFIG",{
-            url,
-            body,
-            otherConfig,
-            method,
-            headers
-        });
         try{
-            const fetchData = await fetch(
-                url,{
-                    method,
-                    body,
-                    headers,
-                    ...otherConfig
-                }
-            );
-
-            console.log("CONFIG-2",url,{
+            const configToSend = {
                 method,
-                body,
                 headers,
                 ...otherConfig
-            });
+            };
 
-            const parsedData = await parseResponseData({
-                resp:fetchData,
-            });
+            if(body){
+                configToSend.body = body;
+            }
+            
+            let fetchData = null;
 
-            const getFinalData = await displayData({
-                data:parsedData
-            });
+            if(noConfig){
+                fetchData = await fetch(url);
+            }else{
+                fetchData = await fetch(
+                    url, configToSend
+                );
+            }
 
-            resolve(getFinalData);
+            if(method !== "GET"){
+                resolve({dataSent:true});
+            }else{
+                const parsedData = await parseResponseData({
+                    resp:fetchData,
+                });
+    
+                const getFinalData = await displayData({
+                    data:parsedData
+                });
+    
+                resolve(getFinalData);
+            }
+
         }catch(err){
-            console.error("ERROR: ",err);
             reject(err);
         }
     }) 
@@ -48,10 +50,8 @@ async function setupFetch({
 
 async function parseResponseData({resp}){
     return new Promise(async (res, rej)=>{
-        console.log(resp);
         if(resp.ok){
             const json = await resp.json();
-            console.log("DATA",json);
             res(json);
         }else{
             rej("Could not get data from server");

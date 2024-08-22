@@ -14,7 +14,6 @@ async function getCurrentSolution({proxyUrl}){
         try{
             const results = await fetch(proxyUrl, config);
             if(results.ok){
-                console.log("TETT");
                 resolve(results.json());
             }else{
                 throw new Error("Could not make request");
@@ -45,7 +44,6 @@ async function postCurrentSolutionToGetSecrets({proxyUrl, solution}){
         const results = await fetch(proxyUrl, config);
         try{
             if(results.ok){
-                console.log("TSTT");
                 resolve(results.json());
             }else{
                 throw new Error("Could not make request");
@@ -63,12 +61,11 @@ export async function makeSecureApiCall({
     headers,
     method,
     otherConfig,
-    secretObjectKey
+    urlParams,
+    secretObjectKey,
+    noConfig
 }){
     try{
-
-        console.log("ITEMS being sent ==>",callBody);
-        console.log("TEST", CURRENT_PROXY_URL);
 
         const getSecuritySolution = await getCurrentSolution({
             proxyUrl:CURRENT_PROXY_URL
@@ -80,27 +77,25 @@ export async function makeSecureApiCall({
         });
         
         const config = {
-            url:securitySolutionSecrets.$sec[secretObjectKey],
+            url:securitySolutionSecrets.$sec[secretObjectKey] + (urlParams ? "?"+urlParams : ""),
             method,
         };
-    
+
         let customConfigObject = null;
-        
+
         if(headers !== null && headers !== undefined){
             config.headers = headers;
         }
     
         if(callBody !== null && callBody !== undefined){
-            config.body = JSON.stringify(markRaw(callBody));
+            config.body = JSON.stringify(callBody);
         }
-    
+        
         if(otherConfig !== null && otherConfig !== undefined){
             customConfigObject = { ...config, otherConfig};
         }
-        
-        const basicApiCall = await apiObject[method]((otherConfig !== null ? customConfigObject : config));
 
-        console.log(basicApiCall);
+        const basicApiCall = await apiObject[method]((otherConfig !== null && otherConfig !== undefined ? customConfigObject : config));
 
         return basicApiCall;
         
