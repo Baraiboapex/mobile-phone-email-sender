@@ -146,10 +146,6 @@ const sendData = async ({
                     apiObject:api,
                     method:"get",
                     noConfig:true,
-                    otherConfig:{
-                        mode:"no-cors",
-                        redirect: "follow",
-                    },
                     secretObjectKey:"u2" 
                 });
 
