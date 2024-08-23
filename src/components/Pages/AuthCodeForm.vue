@@ -155,6 +155,8 @@ const sendData = async ({
 
                 let authCodeIsValid = validateAuthCode.userIsAuthorized;
 
+                console.log(authCodeIsValid);
+
                 if(authCodeIsValid){
                     submissionWasSuccessful.value = true;
                     showAuthCodeForm.value = false;
