@@ -28,6 +28,8 @@ async function setupFetch({
                 );
             }
 
+            console.log(fetchData, method);
+
             if(method !== "GET"){
                 resolve({dataSent:true});
             }else{
