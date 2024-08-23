@@ -5,4 +5,4 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base:"/mobile-phone-email-sender/",
   plugins: [vue()],
-})
+});

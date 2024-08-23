@@ -61,11 +61,13 @@ export const AuthStore = defineStore("Auth", {
 
                     if(validLogin){
                         this.isLoggedIn = validLogin;
-                        this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:this.userIsAuthorized});
+                        this.userIsAuthroized = false;
+                        this.updateSessionStorage({isLoggedIn : true, userIsAuthroized:false});
                         resolve(validLogin);
                     }else{
                         this.isLoggedIn = false;
-                        this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:this.userIsAuthorized});
+                        this.userIsAuthroized = false;
+                        this.updateSessionStorage({isLoggedIn : false, userIsAuthroized:false});
                         reject();
                     }
                 }catch(err){
@@ -85,9 +87,9 @@ export const AuthStore = defineStore("Auth", {
         setIsLoggedInToTrue(){
             this.isLoggedIn = true;
         },
-        setUserAuthorizationToTrue(){
-            this.userIsAuthroized = true;
-            this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:true})
+        setUserAuthorization(isAuthorized){
+            this.userIsAuthroized = isAuthorized;
+            this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:isAuthorized})
         }
     },
     getters:{

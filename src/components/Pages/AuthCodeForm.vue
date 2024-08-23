@@ -214,7 +214,7 @@ const sendData = async ({
 
                 store.updatePage(PageNames.SEND_TYPE_TEMPLATE_NAME);
                 authStore.setIsLoggedInToTrue();
-                authStore.setUserAuthorizationToTrue();
+                authStore.setUserAuthorization(true);
             }
         }catch(err){
             console.log("ERROR :", err)

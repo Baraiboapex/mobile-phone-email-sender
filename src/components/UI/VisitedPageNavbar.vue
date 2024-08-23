@@ -59,7 +59,7 @@
 
     const canShowNavbar = computed(()=>{
         console.log(useAuthStore.getIsLoggedIn, useAuthStore.getUserIsAuthroized);
-        return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized ? true : false;
+        return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized;
     });
 
     watch(
@@ -87,9 +87,10 @@
     }
 
     const logout = ()=>{
-        useAuthStore.logout();
-        useCurrentPageStore.updatePageWithoutNav(PageNames.LOGIN_PAGE_NAME);
         useCurrentPageStore.resetVisitedPagesList();
+        useAuthStore.logout();
+        useAuthStore.setUserAuthorization(false);
+        useCurrentPageStore.updatePageWithoutNav(PageNames.LOGIN_PAGE_NAME);
     };
 
     function enableDisableNavbarButtons({

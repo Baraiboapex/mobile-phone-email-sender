@@ -90,7 +90,7 @@ export const CurrentPageStore = defineStore("CurrentPage", {
             this.currentPage = Routes[pageName];
         },
         resetVisitedPagesList(){
-            this.visitedPages={}
+            this.visitedPages={};
         },
         setRouterStateFromLocalStorage(){
             const currentStateFromSessionStorage =  JSON.parse(sessionStorage.getItem("currentRouter"));

@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-12">
           <div class="d-flex justify-content-center">
-          <div class="form pt-4">
+          <div class="form p-4">
             <VisitedPageNavbar>
             <div class="logo mb-4"></div>
             <DataContainer>
