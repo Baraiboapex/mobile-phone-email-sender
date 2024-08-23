@@ -5,7 +5,8 @@ async function getCurrentSolution({proxyUrl}){
     const config = {
         method:"GET",
         headers:{
-          "Target-URL":CURRENT_SECURITY_SERVER_URL
+          "Target-URL":CURRENT_SECURITY_SERVER_URL,
+            "App-Name":"mobile-phone-email-sender"
         }
     };
     return new Promise(async(resolve, reject)=>{
@@ -35,7 +36,8 @@ async function postCurrentSolutionToGetSecrets({proxyUrl, solution}){
         body:JSON.stringify(objectToSend),
         headers: {
             "Content-Type": "application/json",
-            "Target-URL":CURRENT_SECURITY_SERVER_URL
+            "Target-URL":CURRENT_SECURITY_SERVER_URL,
+            "App-Name":"mobile-phone-email-sender"
         }
     };
     return new Promise(async(resolve, reject)=>{

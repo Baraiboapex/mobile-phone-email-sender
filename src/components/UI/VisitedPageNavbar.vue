@@ -29,7 +29,6 @@
             <slot></slot>
         </div>
     </div>
-
 </template>
 <script setup>
     import {reactive, watch, computed, onMounted, provide} from "vue";

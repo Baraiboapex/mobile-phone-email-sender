@@ -88,8 +88,8 @@
 
         let students = [];
 
-        if(students.includes(",")){
-            students = studentsSelected.value.join(",")
+        if(studentsSelected.value.includes(", ")){
+            students = studentsSelected.value.split(", ")
         }else{
             students.push(studentsSelected.value);
         }
@@ -129,7 +129,7 @@
                     <div v-if="listOfStudentsSelected" class="container-fluid p-0 mt-4">
                         <div class="field-group">
                             <label for="studentsToSelect d-flex flex-wrap m-1">
-                                Please type in the list of students to select with each student email separated by a comma.
+                                Please type in the list of students to select with each student email separated by a comma and a space like so: ",[space]".
                             </label>
                             <textarea type="text" :class="textValidationObject.studentsToSelect.classValue + ' w-100 m-1 text-input'" name="studentsToSelect" v-model="studentsSelected"></textarea>
                             <span v-if="!textValidationObject.studentsToSelect.isValid" class="validator m-1">
