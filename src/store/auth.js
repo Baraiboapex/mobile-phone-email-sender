@@ -56,6 +56,7 @@ export const AuthStore = defineStore("Auth", {
                         noConfig:false,
                         headers:{
                             redirect: "follow",
+                            mode:"no-cors"
                         },
                         secretObjectKey:"u2"
                     });

@@ -148,6 +148,7 @@ const sendData = async ({
                     noConfig:false,
                     headers:{
                         redirect: "follow",
+                        mode:"no-cors"
                     },
                     secretObjectKey:"u2" 
                 });
