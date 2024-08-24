@@ -147,8 +147,7 @@ const sendData = async ({
                     method:"get",
                     noConfig:false,
                     headers:{
-                        redirect: "follow",
-                        mode:"no-cors"
+                        redirect:"follow"
                     },
                     secretObjectKey:"u2" 
                 });
