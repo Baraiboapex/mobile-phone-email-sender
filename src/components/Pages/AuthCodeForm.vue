@@ -134,7 +134,7 @@ const sendData = async ({
                         redirect: "follow",
                         mode:"no-cors"
                     },
-                    secretObjectKey:"u2"
+                    secretObjectKey:"u"
                 });
                 
                 dataToSend.loginMode = "ValidateUserAuthCodeExists";
@@ -145,11 +145,10 @@ const sendData = async ({
                     urlParams:loginValidationFieldsToSubmit,
                     apiObject:api,
                     method:"get",
-                    noConfig:false,
-                    headers:{
-                        redirect:"follow"
+                    otherConfig:{
+                        redirect: "follow"
                     },
-                    secretObjectKey:"u2" 
+                    secretObjectKey:"u" 
                 });
 
                 let authCodeIsValid = validateAuthCode.userIsAuthorized;

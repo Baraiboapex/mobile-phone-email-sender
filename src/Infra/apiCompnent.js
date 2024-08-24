@@ -4,22 +4,26 @@ async function setupFetch({
     otherConfig,
     method,
     headers,
-    noConfig
 }){
     return new Promise(async (resolve, reject)=>{
         try{
             const configToSend = {
-                method,
-                headers,
                 ...otherConfig
             };
+
+            if(method !== "GET"){
+                configToSend.method = method;
+                configToSend.headers = headers;
+            }
 
             if(body){
                 configToSend.body = body;
             }
             
+            console.log("CONFIG BUILT IN API COMPONENT ===> ", url, configToSend, method);
+
             fetch(url, configToSend)
-            .then((res)=>parseResponseData({resp:res}))
+            .then((res)=>parseResponseData({resp:res, method}))
             .then(async (data)=>{
                 if(method !== "GET"){
                     resolve({dataSent:true});
@@ -38,13 +42,20 @@ async function setupFetch({
     }) 
 }
 
-async function parseResponseData({resp}){
+async function parseResponseData({resp, method}){
+    console.log("METHOD", method);
     return new Promise(async (res, rej)=>{
-        if(resp.ok){
-            const json = await resp.json();
-            res(json);
+        if(method === "GET"){
+            console.log("GET");
+            if(resp.ok){
+                const json = await resp.json();
+                res(json);
+            }else{
+                rej("Could not get data from server");
+            }
         }else{
-            rej("Could not get data from server");
+            console.log("POST");
+            res();
         }
     })
 }

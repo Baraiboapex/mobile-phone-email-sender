@@ -62,8 +62,7 @@ export async function makeSecureApiCall({
     method,
     otherConfig,
     urlParams,
-    secretObjectKey,
-    noConfig
+    secretObjectKey
 }){
     try{
 
@@ -94,6 +93,8 @@ export async function makeSecureApiCall({
         if(otherConfig !== null && otherConfig !== undefined){
             customConfigObject = { ...config, otherConfig};
         }
+
+        console.log("CONFIG BUILT IN HTTP SECURITY BINDER ===> ",method, customConfigObject);
 
         const basicApiCall = await apiObject[method]((otherConfig !== null && otherConfig !== undefined ? customConfigObject : config));
 

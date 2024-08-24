@@ -39,8 +39,7 @@ export const AuthStore = defineStore("Auth", {
                             mode:"no-cors",
                             redirect: "follow",
                         },
-                        noConfig:false,
-                        secretObjectKey:"u2"
+                        secretObjectKey:"u"
                     });
                     
                     const loginValidationFieldsToSubmit = {
@@ -53,11 +52,10 @@ export const AuthStore = defineStore("Auth", {
                         urlParams:new URLSearchParams(loginValidationFieldsToSubmit).toString(),
                         apiObject:api,
                         method:"get",
-                        noConfig:false,
-                        headers:{
+                        otherConfig:{
                             redirect: "follow",
                         },
-                        secretObjectKey:"u2"
+                        secretObjectKey:"u"
                     });
                     
                     let validLogin = validateLogin.userIsLoggedIn;

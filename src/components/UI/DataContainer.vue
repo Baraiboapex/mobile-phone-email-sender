@@ -185,7 +185,7 @@
                     redirect: "follow",
                     mode:"no-cors"
                 },
-                secretObjectKey:"u"
+                secretObjectKey:"u2"
             });
 
             toggleLoadingSign({
