@@ -145,7 +145,10 @@ const sendData = async ({
                     urlParams:loginValidationFieldsToSubmit,
                     apiObject:api,
                     method:"get",
-                    noConfig:true,
+                    noConfig:false,
+                    headers:{
+                        redirect: "follow",
+                    },
                     secretObjectKey:"u2" 
                 });
 
