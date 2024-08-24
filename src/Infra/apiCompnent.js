@@ -18,31 +18,19 @@ async function setupFetch({
                 configToSend.body = body;
             }
             
-            let fetchData = null;
-
-            if(noConfig){
-                fetchData = await fetch(url);
-            }else{
-                fetchData = await fetch(
-                    url, configToSend
-                );
-            }
-
-            console.log(fetchData, url, configToSend);
-
-            if(method !== "GET"){
-                resolve({dataSent:true});
-            }else{
-                const parsedData = await parseResponseData({
-                    resp:fetchData,
-                });
-    
-                const getFinalData = await displayData({
-                    data:parsedData
-                });
-    
-                resolve(getFinalData);
-            }
+            fetch(url, configToSend)
+            .then((res)=>parseResponseData({resp:res}))
+            .then(async (data)=>{
+                if(method !== "GET"){
+                    resolve({dataSent:true});
+                }else{
+                    const getFinalData = await displayData({
+                        data:parsedData
+                    });
+        
+                    resolve(getFinalData);
+                }
+            });
 
         }catch(err){
             reject(err);
