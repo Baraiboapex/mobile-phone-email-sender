@@ -25,7 +25,7 @@ async function setupFetch({
                     resolve({dataSent:true});
                 }else{
                     const getFinalData = await displayData({
-                        data:parsedData
+                        data
                     });
         
                     resolve(getFinalData);
