@@ -82,6 +82,11 @@
         if(!sessionStorage.getItem("currentData")){
             initializeDataObjectInSessionStorage();
         }else{
+            const dataFromLocalStorage = JSON.parse(sessionStorage.getItem("currentData"));
+            dataToSend.usersToSendTo = dataFromLocalStorage.usersToSendTo;
+            dataToSend.selectedTemplate = dataFromLocalStorage.selectedTemplate;
+            dataToSend.templateParams = dataFromLocalStorage.templateParams;
+            dataToSend.mode = dataFromLocalStorage.mode;
             setDataStateFromLocalStorage();
         }
     });
@@ -97,12 +102,7 @@
     }
 
     const updateSessionStorage = (currentStateObject) => {
-        if(sessionStorage.getItem("currentData")){
-            sessionStorage.removeItem("currentData");
-            sessionStorage.setItem("currentData", JSON.stringify(currentStateObject));
-        }else{
-            sessionStorage.setItem("currentData", JSON.stringify(currentStateObject));
-        }
+        sessionStorage.setItem("currentData", JSON.stringify(currentStateObject));
     };
 
     const initializeDataObjectInSessionStorage = () => {

@@ -17,7 +17,7 @@ async function setupFetch({
             }
 
             if(body){
-                configToSend.body = body;
+                configToSend.body = JSON.stringify(body);
             }
             
             console.log("CONFIG BUILT IN API COMPONENT ===> ", url, configToSend, method);

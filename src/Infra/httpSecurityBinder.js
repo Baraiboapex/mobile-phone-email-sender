@@ -87,7 +87,7 @@ export async function makeSecureApiCall({
         }
     
         if(callBody !== null && callBody !== undefined){
-            config.body = JSON.stringify(callBody);
+            config.body = callBody;
         }
         
         if(otherConfig !== null && otherConfig !== undefined){
