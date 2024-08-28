@@ -96,9 +96,10 @@ body{
         overflow: scroll;
     }
 
+    .app-button-small.text-overflow-elipses,
     .text-overflow-elipses{
         white-space: nowrap;
-        overflow: hidden;
+        overflow: hidden !important;
         text-overflow: ellipsis !important;
     }
 

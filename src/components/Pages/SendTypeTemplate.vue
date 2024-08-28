@@ -74,7 +74,7 @@
         emails:[]
     });
 
-    const SEARCHABLE_LIST_SEARCH_FIELD = ref("emailAddress");
+    const SEARCHABLE_LIST_SEARCH_FIELD = ref("name");
     const SEARCHABLE_LIST_SELECTION_FIELD = ref("emailAddress");
     const SEARCHABLE_LIST_LABEL = ref("Student Emails");
     const LOADING_LIST_MESSAGE = ref("Loading Data");

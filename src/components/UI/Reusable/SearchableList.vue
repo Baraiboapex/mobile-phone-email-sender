@@ -11,7 +11,7 @@
             <div class="col-12 p-0">
                 <label>Selected Items</label>
                 <div class="selcted-item-container app-component-border d-flex flex-row justify-content-start align-items-center flex-wrap">
-                    <div v-for="item in state.selectedItems" class="app-button-small p-1 m-1 d-flex flex-row">
+                    <div v-for="item in state.selectedItems" class="app-button-small p-1 m-1 d-flex flex-row text-overflow-elipses">
                         <button class="p-0 close-button btn btn-danger p-1" @click="(event)=>removedItemFromList(event, item)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
                                 <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
@@ -34,11 +34,9 @@
         <div class="row p-0 app-component-border">
             <div class="col-12">
                 <div class="list-container overflow-scroll d-flex w-100 flex-column flex-wrap justify-content-start align-items-start">
-                    
                     <div v-if="hasData" class="w-100">
-                        <div v-for="item in state.actualListItems" :class="(item.itemSelected ? 'app-button-small-selected ' : '' ) + 'app-button-small text-overflow-elipses p-3 m-1 w-100'" @click="(event)=>addItemToList(event, item)" >
+                        <div v-for="item in state.actualListItems" :class="(state.selectedIndices[item.name] ? 'app-button-small-selected ' : '' ) + 'app-button-small p-3 m-1 w-100'" @click="(event)=>addItemToList(event, item)" >
                             {{ item[searchableField] }}
-                            {{ item.itemSelected }}
                         </div>
                     </div>
                     <div v-else class="d-flex justify-content-center mb-4 w-100">
@@ -60,7 +58,7 @@
     const state = reactive({
         actualListItems:[],
         selectedItems:[],
-        selectedIndices:[]
+        selectedIndices:{}
     });
 
     const emittedEvents = defineEmits([
@@ -95,36 +93,14 @@
     const formatListDataFromProps = () => {
         const formattedListItems = props.listItems.map((listItem, index)=>(
             {
-                itemSelected:false,
-                index,
                 ...listItem,
             }
         ));
         return formattedListItems;
     }
 
-    const determnineIfItemsOnListAreSelected = () => {
-        const listItems = formatListDataFromProps();
-        
-        let listHasSelectedItems = state.selectedIndices.length > 0;
-
-        if(listHasSelectedItems){
-            const listItemsWithSelectedItems = listItems.map((item)=>{
-                if(state.selectedIndices.includes(item.index)){
-                    item.itemSelected = true;
-                    return item
-                }
-                return item;
-            });
-            return listItemsWithSelectedItems;
-        }else{
-            return listItems;
-        }
-    }
-
     const determineActualListItemsViewed = (searchText) => {
-        let returnedFormattedData = determnineIfItemsOnListAreSelected();
-        return searchText === "" ? returnedFormattedData : state.actualListItems.filter((item)=>item[props.searchableField].includes(searchText));
+        return searchText === "" ? props.listItems : state.actualListItems.filter((item)=>item[props.searchableField].includes(searchText));
     };
 
     const searchItems = (event) => {
@@ -134,14 +110,14 @@
         state.actualListItems = viewedListItems;
     };
 
-    const addItemToList = (_,item, index) => {
+    const addItemToList = (_,item) => {
         const alreadyHasItem = state.selectedItems.find((btnItem)=> btnItem[props.searchableField] === item[props.searchableField]);
         
         if(!alreadyHasItem){
-            item.itemSelected = true;
 
             state.selectedItems.push(item);
-            state.selectedIndices.push(item.index);
+
+            state.selectedIndices[item.name] = true;
 
             emittedEvents("listItemsUpdated", state.selectedItems);
         }else{
@@ -151,14 +127,11 @@
 
     const removedItemFromList = (_,item) => {
 
-        state.actualListItems[item.index].itemSelected = false;
-
         state.selectedItems = state.selectedItems.filter(btnItem=>{
             return btnItem[props.selectableField] !== item[props.selectableField];
         });
-        state.selectedIndices = state.selectedIndices.filter(btnIndex=>{
-            return btnIndex !== item.index;
-        });
+
+        delete state.selectedIndices[item.name];
 
         console.log("TEST-1", state.selectedItems);
         console.log("TEST-2", state.selectedIndices);
