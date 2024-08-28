@@ -42,6 +42,8 @@ export const AuthStore = defineStore("Auth", {
                         secretObjectKey:"u"
                     });
                     
+                    console.log("TEST");
+
                     const loginValidationFieldsToSubmit = {
                         userName,
                         password,
@@ -73,7 +75,7 @@ export const AuthStore = defineStore("Auth", {
                     }
                 }catch(err){
                     this.updateSessionStorage({isLoggedIn : this.isLoggedIn, userIsAuthroized:false});
-                    throw new Error("Could not login:", err);
+                    reject("Could not login");
                 }
             });
         },

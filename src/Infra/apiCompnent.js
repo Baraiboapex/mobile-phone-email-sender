@@ -20,20 +20,26 @@ async function setupFetch({
                 configToSend.body = JSON.stringify(body);
             }
             
-            console.log("CONFIG BUILT IN API COMPONENT ===> ", url, configToSend, method);
-
             fetch(url, configToSend)
             .then((res)=>parseResponseData({resp:res, method}))
             .then(async (data)=>{
                 if(method !== "GET"){
-                    resolve({dataSent:true});
+                    if(data){
+                        resolve({dataSent:true});
+                    }else{
+                        reject({
+                            error:"Could not get data"
+                        });
+                    }
                 }else{
                     const getFinalData = await displayData({
                         data
                     });
-        
+
                     resolve(getFinalData);
                 }
+            }).catch((err)=>{
+                reject(err);
             });
 
         }catch(err){
@@ -43,10 +49,8 @@ async function setupFetch({
 }
 
 async function parseResponseData({resp, method}){
-    console.log("METHOD", method);
     return new Promise(async (res, rej)=>{
         if(method === "GET"){
-            console.log("GET");
             if(resp.ok){
                 const json = await resp.json();
                 res(json);
@@ -54,8 +58,7 @@ async function parseResponseData({resp, method}){
                 rej("Could not get data from server");
             }
         }else{
-            console.log("POST");
-            res();
+            res(resp);
         }
     })
 }

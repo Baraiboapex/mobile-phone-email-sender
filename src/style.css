@@ -50,6 +50,12 @@ body{
       text-align:center;
 	}
 
+    .app-component-border{
+        border-width:0.5em;
+        border-style: solid;
+        border-image: radial-gradient(rgb(255, 255, 255), rgb(168,0,0)) 1;
+    }
+
     .logo{
         background-image: url("./images/japanese-class-logo.png");
         background-size: contain;
@@ -84,6 +90,22 @@ body{
         background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
     }
 
+    .selcted-item-container{
+        max-height:10em;
+        min-height: 3em;
+        overflow: scroll;
+    }
+
+    .text-overflow-elipses{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis !important;
+    }
+
+    .selcted-item-container div{
+        width: 15em !important;
+    }
+
     .app-btn-nav:visited{
         font-size:0.7em;
         height:100% !important;
@@ -115,8 +137,12 @@ body{
     .app-button-small{
         letter-spacing:0.2em;
         font-family:sans-serif;
+        cursor:pointer;
+        text-overflow: ellipsis !important;
+        overflow: hidden;
         border-radius:0px;
         color:white !important;
+        text-decoration:none;
         background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
     }
 
@@ -136,18 +162,34 @@ body{
         background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
     }
 
-    .app-button-small:active{
-        letter-spacing:0.2em;
-        font-family:sans-serif;
-        border-radius:0px;
+    .app-button-small-selected{
         color:white !important;
-        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgba(168,0,0,1) 100%);
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgb(36, 3, 3) 100%);
+    }
+
+    .app-button-small-selected:hover{
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgb(36, 3, 3) 100%);
+    }
+
+    .app-button-small:visited{
+        color:white !important;
+        background-image:radial-gradient(circle at top right, rgba(255,255,255,1) -90%, rgb(36, 3, 3) 100%);
     }
 
     .cancel{
         background-color:white!important;
         color:darkred!important;
         background-image:none;
+    }
+
+    .close-button{
+        color:white;
+        z-index:1000;
+    }
+
+    .list-container{
+        height:20em;
     }
 
     .app-button:hover{

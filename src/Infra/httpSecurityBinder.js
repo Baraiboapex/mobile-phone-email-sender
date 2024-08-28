@@ -64,43 +64,44 @@ export async function makeSecureApiCall({
     urlParams,
     secretObjectKey
 }){
-    try{
+    return new Promise(async (resolve,reject)=>{
+        try{
 
-        const getSecuritySolution = await getCurrentSolution({
-            proxyUrl:CURRENT_PROXY_URL
-        });
+            const getSecuritySolution = await getCurrentSolution({
+                proxyUrl:CURRENT_PROXY_URL
+            });
+        
+            const securitySolutionSecrets = await postCurrentSolutionToGetSecrets({
+                proxyUrl:CURRENT_PROXY_URL,
+                solution:getSecuritySolution
+            });
+            
+            const config = {
+                url:securitySolutionSecrets.$sec[secretObjectKey] + (urlParams ? "?"+urlParams : ""),
+                method,
+            };
     
-        const securitySolutionSecrets = await postCurrentSolutionToGetSecrets({
-            proxyUrl:CURRENT_PROXY_URL,
-            solution:getSecuritySolution
-        });
-        
-        const config = {
-            url:securitySolutionSecrets.$sec[secretObjectKey] + (urlParams ? "?"+urlParams : ""),
-            method,
-        };
-
-        let customConfigObject = null;
-
-        if(headers !== null && headers !== undefined){
-            config.headers = headers;
-        }
+            let customConfigObject = null;
     
-        if(callBody !== null && callBody !== undefined){
-            config.body = callBody;
-        }
+            if(headers !== null && headers !== undefined){
+                config.headers = headers;
+            }
         
-        if(otherConfig !== null && otherConfig !== undefined){
-            customConfigObject = { ...config, otherConfig};
+            if(callBody !== null && callBody !== undefined){
+                config.body = callBody;
+            }
+            
+            if(otherConfig !== null && otherConfig !== undefined){
+                customConfigObject = { ...config, otherConfig};
+            }
+    
+            const basicApiCall = await apiObject[method]((otherConfig !== null && otherConfig !== undefined ? customConfigObject : config));
+    
+            resolve(basicApiCall);
+            
+        }catch(err){
+            reject("Could not make request");
         }
-
-        console.log("CONFIG BUILT IN HTTP SECURITY BINDER ===> ",method, customConfigObject);
-
-        const basicApiCall = await apiObject[method]((otherConfig !== null && otherConfig !== undefined ? customConfigObject : config));
-
-        return basicApiCall;
-        
-    }catch(err){
-        throw new Error("Could not make request");
-    }
+    });
+    
 }

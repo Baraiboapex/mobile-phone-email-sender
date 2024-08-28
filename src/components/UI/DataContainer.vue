@@ -53,7 +53,7 @@
     </div>
 </template>
 <script setup>
-    import {ref, reactive, computed, provide, onMounted, markRaw, inject} from "vue";
+    import {ref, reactive, computed, provide, onMounted, markRaw, inject, } from "vue";
     import {makeSecureApiCall} from "../../Infra/httpSecurityBinder";
     import api from "../../Infra/apiCompnent";
     
@@ -92,7 +92,7 @@
     });
 
     const setDataStateFromLocalStorage = () => {
-        const currentStateFromSessionStorage =  JSON.parse(dataToSend);
+        const currentStateFromSessionStorage =  dataToSend;
 
         const updateObject = {
             ...currentStateFromSessionStorage
@@ -158,7 +158,6 @@
     };
 
     const sendData = async () => {
-        
         try{
             showPage.value = false;
 
@@ -198,8 +197,6 @@
                 messageText:"Email"
             });
         }catch(err){
-            console.log(err);
-
             enableDisableNavbarButtons({
                 buttonsDisabled:false
             });

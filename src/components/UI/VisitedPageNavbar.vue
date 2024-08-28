@@ -57,7 +57,6 @@
     });
 
     const canShowNavbar = computed(()=>{
-        console.log(useAuthStore.getIsLoggedIn, useAuthStore.getUserIsAuthroized);
         return useAuthStore.getIsLoggedIn && useAuthStore.getUserIsAuthroized;
     });
 

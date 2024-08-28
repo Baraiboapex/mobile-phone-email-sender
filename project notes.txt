@@ -1,0 +1,44 @@
+
+REUSABLE COMPONENT NOTES
+--------------------------------------------------
+For Searchable List Component
+==================================
+1.) Pagination WILL become a MUST as the list 
+of our students attending the class grows. 
+Think about a way to better use the
+API
+=================================
+--------------------------------------------------
+
+PAGE COMPONENT NOTES
+--------------------------------------------------
+
+--------------------------------------------------
+
+INFRA CLASSES NOTES
+--------------------------------------------------
+
+--------------------------------------------------
+
+HELPER FUNCTIONS NOTES
+--------------------------------------------------
+
+--------------------------------------------------
+
+DATASTORE CLASSES NOTES
+--------------------------------------------------
+
+--------------------------------------------------
+
+CSS NOTES
+--------------------------------------------------
+
+For Main Css File
+=================================
+1.) We need to make the main css mor organized or 
+focus on somehow breaking up all of the scattered css
+into smaller, well-organized files and/or folders 
+based on overall use cases, component, etc. (
+Figure out the best way to break them up.)
+=================================
+--------------------------------------------------

@@ -52,7 +52,10 @@ export const CurrentPageStore = defineStore("CurrentPage", {
                     const pages = Object.keys(this.visitedPages);
                     const indexOfSelectedPage = pages.indexOf(pageName);
     
-                    const filteredPages = pages.filter(page => pages.indexOf(page) !== indexOfSelectedPage + 1);
+                    const filteredPages = pages.filter(page => {
+                        console.log(pages.indexOf(page) !== 0);
+                        return (indexOfSelectedPage !== 0 ? pages.indexOf(page) !== indexOfSelectedPage + 1 : pages.indexOf(page) === 0);
+                    });
     
                     const newObject = {};
     

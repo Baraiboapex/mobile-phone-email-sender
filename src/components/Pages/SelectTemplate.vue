@@ -1,26 +1,3 @@
-<script setup>
-    import {computed, inject} from "vue";
-
-    const emittedEvents = defineEmits([
-        "changeCurrentRoute"
-    ]);
-
-    const {
-        setSelectedTemplate,
-    } = inject("dataUpdaters");
-
-    const selectTemplate = (event)=>{
-        const currentTemplateName = event.target.id;
-        const currentSelectedTemplate = currentTemplateName.substring(
-            3, 
-            currentTemplateName.length
-        );
-
-        setSelectedTemplate(currentSelectedTemplate);
-        emittedEvents("changeCurrentRoute",currentSelectedTemplate);
-    };
-
-</script>
 <template>
     <div class="container w-100">
         <div class="row mt-2 mb-2">
@@ -61,3 +38,26 @@
         </div>
     </div>
 </template>
+<script setup>
+    import {computed, inject} from "vue";
+
+    const emittedEvents = defineEmits([
+        "changeCurrentRoute"
+    ]);
+
+    const {
+        setSelectedTemplate,
+    } = inject("dataUpdaters");
+
+    const selectTemplate = (event)=>{
+        const currentTemplateName = event.target.id;
+        const currentSelectedTemplate = currentTemplateName.substring(
+            3, 
+            currentTemplateName.length
+        );
+
+        setSelectedTemplate(currentSelectedTemplate);
+        emittedEvents("changeCurrentRoute",currentSelectedTemplate);
+    };
+
+</script>

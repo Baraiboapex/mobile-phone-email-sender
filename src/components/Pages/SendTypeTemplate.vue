@@ -1,112 +1,3 @@
-<script setup>
-    import {reactive, ref, inject} from "vue";
-    import {
-        CurrentPageStore,
-    } from "../UI/Router/Routes.js"
-    import {
-        validateTextInput,
-        validateAllTextFields,
-        renderTextFieldValidation,
-        textRulesNames,
-        DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    } from "../../helpers/inputValidation/inputValidator.js";
-
-    const {
-        setUsersToSendTo,
-        setMode
-    } = inject("dataUpdaters");
-    const store = CurrentPageStore();
-
-    const emittedEvents = defineEmits([
-        "changeCurrentRoute"
-    ]);
-
-    const studentsSelected = ref("");
-    const listOfStudentsSelected = ref(false);
-
-    const textFieldValidationList = [
-        ()=>({
-            fieldName:"studentsToSelect",
-            validator:()=>validateAllEmails({
-                value:studentsSelected.value
-            }),
-            invalidText:"Please input valid student emails to send to"
-        })
-    ];
-    
-    const validateAllEmails = ({value}) => {
-        const currentSelectedEmails = value;
-        const emailsArray = currentSelectedEmails.split(", ");
-        const emailsArrayLength = emailsArray.length;
-
-        let totalValidatedEmails = 0;
-
-        emailsArray.forEach((email) => {
-            const emailIsCorrect = validateTextInput({
-                rules: [textRulesNames.VALID_EMAIL_RULE, textRulesNames.REQUIRED_RULE],
-                textValue: email,
-            });
-
-            if (emailIsCorrect.isValid) {
-                totalValidatedEmails++;
-            }
-        });
-
-        let allEmailsValidated = totalValidatedEmails >= emailsArrayLength;
-
-        return {isValid:allEmailsValidated};
-    }
-
-    const textValidationObject = reactive({
-        studentsToSelect: DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
-    });
-
-    const selectListOfStudents = () => {
-        listOfStudentsSelected.value = true;
-    };
-
-    const cancelListOfStudentsSelected = () => {
-        listOfStudentsSelected.value = false;
-        textValidationObject.studentsToSelect = DEFAULT_TEXT_VALIDATION_OBJECT_VALUE;
-    };
-
-    const goToTemplateSelection = (event) => {
-        const currentTemplateName = event.target.id;
-        const currentMode = event.target.name;
-        const currentSelectedTemplate = currentTemplateName.substring(
-            3, 
-            currentTemplateName.length
-        );
-
-        const textInputIsValid = validateAllTextFields(textFieldValidationList);
-
-        renderTextFieldValidation({
-            validFieldsList:textInputIsValid.validFieldsList,
-            invalidFieldsList:textInputIsValid.invalidFieldsList,
-            valueToValidateFromValidatorObject:textValidationObject
-        });
-
-        let students = [];
-
-        if(studentsSelected.value.includes(", ")){
-            students = studentsSelected.value.split(", ")
-        }else{
-            students.push(studentsSelected.value);
-        }
-
-        if(listOfStudentsSelected.value){
-            if(textInputIsValid.inputsAreValid){
-                setMode(currentMode);
-                setUsersToSendTo(students);
-                emittedEvents("changeCurrentRoute",currentSelectedTemplate);
-            }
-        }else{
-            setMode(currentMode);
-            emittedEvents("changeCurrentRoute",currentSelectedTemplate);
-        }
-    }
-
-</script>
 <template>
     <div class="container w-100">
         <div class="row mt-4">
@@ -128,13 +19,14 @@
                 <div class="w-100 d-flex flex-column justify-content-center align-items-center">
                     <div v-if="listOfStudentsSelected" class="container-fluid p-0 mt-4">
                         <div class="field-group">
-                            <label for="studentsToSelect d-flex flex-wrap m-1">
-                                Please type in the list of students to select with each student email separated by a comma and a space like so: ",[space]".
-                            </label>
-                            <textarea type="text" :class="textValidationObject.studentsToSelect.classValue + ' w-100 m-1 text-input'" name="studentsToSelect" v-model="studentsSelected"></textarea>
-                            <span v-if="!textValidationObject.studentsToSelect.isValid" class="validator m-1">
-                                {{ textValidationObject.studentsToSelect.invalidText }}
-                            </span>
+                            <SearchableList
+                                :listItems="listOfStudentEmails.emails"
+                                :searchableField = "SEARCHABLE_LIST_SEARCH_FIELD"
+                                :selectableField="SEARCHABLE_LIST_SELECTION_FIELD"
+                                :listLabel="SEARCHABLE_LIST_LABEL"
+                                :dataLoadingMessage="LOADING_LIST_MESSAGE"
+                                @list-items-updated="updateStudentList"
+                            />
                         </div>
                         <div class="d-flex flex-row align-items-center justify-content-start m-1">
                             <button @click="cancelListOfStudentsSelected" class="btn btn-danger app-button-small cancel">Cancel</button>
@@ -147,3 +39,102 @@
         </div>
     </div>
 </template>
+<script setup>
+    import {reactive, ref, inject} from "vue";
+    import {
+        CurrentPageStore,
+    } from "../UI/Router/Routes.js"
+    import {
+        validateTextInput,
+        validateAllTextFields,
+        renderTextFieldValidation,
+        textRulesNames,
+        DEFAULT_TEXT_VALIDATION_OBJECT_VALUE
+    } from "../../helpers/inputValidation/inputValidator.js";
+
+    import SearchableList from "../UI/Reusable/SearchableList.vue";
+
+    import {makeSecureApiCall} from "../../Infra/httpSecurityBinder.js";
+    import api from "../../Infra/apiCompnent.js";
+
+    const {
+        setUsersToSendTo,
+        setMode
+    } = inject("dataUpdaters");
+
+    const store = CurrentPageStore();
+
+    const emittedEvents = defineEmits([
+        "changeCurrentRoute"
+    ]);
+
+    const studentsSelected = ref("");
+    const listOfStudentsSelected = ref(false);
+    const listOfStudentEmails = reactive({
+        emails:[]
+    });
+
+    const SEARCHABLE_LIST_SEARCH_FIELD = ref("emailAddress");
+    const SEARCHABLE_LIST_SELECTION_FIELD = ref("emailAddress");
+    const SEARCHABLE_LIST_LABEL = ref("Student Emails");
+    const LOADING_LIST_MESSAGE = ref("Loading Data");
+
+    const getDataForEmailList = async ({
+        api,
+    }) => {
+        const dataToGet = await makeSecureApiCall({
+            urlParams:new URLSearchParams({studentDataToGet:"Email"}).toString(),
+            apiObject:api,
+            method:"get",
+            otherConfig:{
+                redirect: "follow"
+            },
+            secretObjectKey:"u3" 
+        }); 
+
+        listOfStudentEmails.emails = dataToGet;
+    };
+
+    const updateStudentList = (selectedStudents) => {
+        let studentsString = selectedStudents.map((student)=>student.emailAddress).join(", ");
+        studentsSelected.value = studentsString;
+    }
+
+    const selectListOfStudents = () => {
+        getDataForEmailList({
+            api
+        });
+        listOfStudentsSelected.value = true;
+    };
+
+    const cancelListOfStudentsSelected = () => {
+        listOfStudentsSelected.value = false;
+    };
+
+    const goToTemplateSelection = (event) => {
+        const currentTemplateName = event.target.id;
+        const currentMode = event.target.name;
+        const currentSelectedTemplate = currentTemplateName.substring(
+            3, 
+            currentTemplateName.length
+        );
+
+        let students = [];
+
+        if(studentsSelected.value.includes(", ")){
+            students = studentsSelected.value.split(", ")
+        }else{
+            students.push(studentsSelected.value);
+        }
+
+        if(listOfStudentsSelected.value){
+            setMode(currentMode);
+            setUsersToSendTo(students);
+            emittedEvents("changeCurrentRoute", currentSelectedTemplate);
+        }else{
+            setMode(currentMode);
+            emittedEvents("changeCurrentRoute", currentSelectedTemplate);
+        }
+    }
+
+</script>
