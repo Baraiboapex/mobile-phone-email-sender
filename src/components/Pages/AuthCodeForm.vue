@@ -151,8 +151,6 @@ const sendData = async ({
                     secretObjectKey:"u" 
                 });
 
-                console.log(validateAuthCode);
-
                 let authCodeIsValid = validateAuthCode.userIsAuthorized;
 
                 if(authCodeIsValid){

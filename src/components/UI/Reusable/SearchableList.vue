@@ -133,9 +133,6 @@
 
         delete state.selectedIndices[item.name];
 
-        console.log("TEST-1", state.selectedItems);
-        console.log("TEST-2", state.selectedIndices);
-        console.log(item);
         emittedEvents("listItemsUpdated", state.selectedItems);
     };
 

@@ -42,8 +42,6 @@ export const AuthStore = defineStore("Auth", {
                         secretObjectKey:"u"
                     });
                     
-                    console.log("TEST");
-
                     const loginValidationFieldsToSubmit = {
                         userName,
                         password,

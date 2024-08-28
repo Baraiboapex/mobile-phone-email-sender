@@ -31,7 +31,7 @@
                         <div class="d-flex flex-row align-items-center justify-content-start m-1">
                             <button @click="cancelListOfStudentsSelected" class="btn btn-danger app-button-small cancel">Cancel</button>
                             <span>&nbsp;&nbsp;</span>
-                            <button id="setSelectTemplate" name="SendEmailsToSelected" @click="goToTemplateSelection" class="btn btn-danger app-button-small">Continue</button>
+                            <button id="setSelectTemplate" name="SendEmailsToSelected" :disabled="checkCanContinue" @click="goToTemplateSelection" class="btn btn-danger app-button-small">Continue</button>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script setup>
-    import {reactive, ref, inject} from "vue";
+    import {reactive, ref, inject, computed} from "vue";
     import {
         CurrentPageStore,
     } from "../UI/Router/Routes.js"
@@ -78,6 +78,8 @@
     const SEARCHABLE_LIST_SELECTION_FIELD = ref("emailAddress");
     const SEARCHABLE_LIST_LABEL = ref("Student Emails");
     const LOADING_LIST_MESSAGE = ref("Loading Data");
+
+    const checkCanContinue = computed(()=>!(studentsSelected.value !== ""));
 
     const getDataForEmailList = async ({
         api,

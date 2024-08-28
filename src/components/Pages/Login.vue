@@ -146,7 +146,6 @@
 
                 resolve(loginData);
             }catch(err){
-                console.log("LOGIN ERROR", err);
                 submissionWasSuccessful.value = false;
                 showLoginForm.value = false;
                 showLoadingSign.value = false;
