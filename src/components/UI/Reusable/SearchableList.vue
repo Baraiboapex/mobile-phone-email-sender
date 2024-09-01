@@ -104,6 +104,7 @@
     };
 
     const searchItems = (event) => {
+        state.actualListItems = props.listItems;
         let searchText = event.target.value;
         let viewedListItems = determineActualListItemsViewed(searchText);
 
