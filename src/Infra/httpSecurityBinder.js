@@ -1,5 +1,5 @@
-const CURRENT_PROXY_URL = "https://mb-cors-proxy.fly.dev/";
-const CURRENT_SECURITY_SERVER_URL = "https://sum-auth-server-aged-smoke-7979.fly.dev/solution";
+const CURRENT_PROXY_URL = "https://mb-cors-proxy.onrender.com";
+const CURRENT_SECURITY_SERVER_URL = "https://sum-auth-server.onrender.com/solution";
 
 async function getCurrentSolution({proxyUrl}){
     const config = {
