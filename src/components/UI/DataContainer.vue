@@ -11,7 +11,7 @@
                 <div v-else class="d-flex justify-content-center w-100">
                     <LoadingSign
                         :showLoadingSign="showLoadingSign"
-                        loadingMessageText="Sending email..."
+                        :loadingMessageText="sendingEmailMessage[dataToSend.mode]"
                     />
                     <SubmissionMessage
                 :showSubmissionMessage="showSubmissionMessage"
@@ -68,7 +68,12 @@
         usersToSendTo:[],
         selectedTemplate:null,
         templateParams:{},
-        mode:null
+        mode:null,
+    });
+
+    const sendingEmailMessage = reactive({
+        SendEmailsToAll:"Sending email to all students... (This will take a while)",
+        SendEmailsToSelected:"Sending email to selected students..."
     });
     
     const showPage = ref(true);
