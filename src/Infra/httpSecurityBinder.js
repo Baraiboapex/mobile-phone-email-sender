@@ -80,7 +80,7 @@ export async function makeSecureApiCall({
                 url:securitySolutionSecrets.$sec[secretObjectKey] + (urlParams ? "?"+urlParams : ""),
                 method,
             };
-    
+            
             let customConfigObject = null;
     
             if(headers !== null && headers !== undefined){
@@ -100,6 +100,7 @@ export async function makeSecureApiCall({
             resolve(basicApiCall);
             
         }catch(err){
+            console.log("ERROR ! " + err);
             reject("Could not make request");
         }
     });
