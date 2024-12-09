@@ -94,7 +94,9 @@ export async function makeSecureApiCall({
             if(otherConfig !== null && otherConfig !== undefined){
                 customConfigObject = { ...config, otherConfig};
             }
-    
+            
+            console.log("CONFIG", config);
+
             const basicApiCall = await apiObject[method]((otherConfig !== null && otherConfig !== undefined ? customConfigObject : config));
     
             resolve(basicApiCall);
