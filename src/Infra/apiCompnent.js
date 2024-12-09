@@ -18,6 +18,7 @@ async function setupFetch({
 
             if(body){
                 configToSend.body = JSON.stringify(body);
+                console.log(body);
             }
             
             fetch(url, configToSend)
