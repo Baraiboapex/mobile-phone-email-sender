@@ -49,9 +49,12 @@ export const AuthStore = defineStore("Auth", {
                     };
                     
                     const validateLogin = await makeSecureApiCall({
-                        urlParams:new URLSearchParams(loginValidationFieldsToSubmit).toString(),
+                        callBody:JSON.stringify(loginValidationFieldsToSubmit),
                         apiObject:api,
                         method:"get",
+                        headers:{
+                            "Content-Type": "application/json",
+                        },
                         otherConfig:{
                             redirect: "follow",
                         },
