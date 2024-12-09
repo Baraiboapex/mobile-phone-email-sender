@@ -49,7 +49,7 @@ export const AuthStore = defineStore("Auth", {
                     };
                     
                     const validateLogin = await makeSecureApiCall({
-                        callBody:JSON.stringify(loginValidationFieldsToSubmit),
+                        callBody:loginValidationFieldsToSubmit,
                         apiObject:api,
                         method:"get",
                         headers:{
@@ -67,6 +67,7 @@ export const AuthStore = defineStore("Auth", {
                         this.isLoggedIn = validLogin;
                         this.userIsAuthroized = false;
                         this.updateSessionStorage({isLoggedIn : true, userIsAuthroized:false});
+                        console.log(validLogin);
                         resolve(validLogin);
                     }else{
                         this.isLoggedIn = false;
