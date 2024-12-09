@@ -52,6 +52,9 @@ export const AuthStore = defineStore("Auth", {
                         urlParams:new URLSearchParams(loginValidationFieldsToSubmit).toString(),
                         apiObject:api,
                         method:"get",
+                        headers:{
+                            "Content-Type": "application/json",
+                        },
                         otherConfig:{
                             redirect: "follow",
                         },
