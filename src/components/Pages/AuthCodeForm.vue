@@ -125,7 +125,7 @@ const sendData = async ({
             try{
                 await makeSecureApiCall({
                     apiObject:api,
-                    callBody:JSON.stringify(dataToSend),
+                    callBody:dataToSend,
                     headers:{
                         "Content-Type": "application/json",
                     },
