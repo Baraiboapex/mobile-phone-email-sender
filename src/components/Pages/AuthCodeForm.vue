@@ -132,7 +132,6 @@ const sendData = async ({
                     method:"post",
                     otherConfig:{
                         redirect: "follow",
-                        mode:"no-cors"
                     },
                     secretObjectKey:"u"
                 });
