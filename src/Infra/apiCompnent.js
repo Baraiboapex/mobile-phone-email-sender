@@ -21,7 +21,7 @@ async function setupFetch({
                 console.log(body);
             }
             
-            console.log(`fetch(${url}, ${configToSend.toString()})`, configToSend.toString());
+            console.log(`fetch(${url})`, configToSend);
             
             fetch(url, configToSend)
             .then((res)=>parseResponseData({resp:res, method}))
